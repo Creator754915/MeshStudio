@@ -57,7 +57,7 @@ def add():
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='sphere', name=f'Sphere{len(cube_nmb)}', postion=(0, 0, 0), color=rgb(r, g, b),
+        cube1 = Draggable(parent=scene, model='sphere', name=f'Sphere{len(cube_nmb)}', postion=(0, 0, 0), color=rgb(r, g, b), texture='new_texture',
                           lock=(lock_z, lock_y, lock_x))
         mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0), z=-1)
         mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0), x=-1)
@@ -69,7 +69,7 @@ def add():
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='plane', name=f'Plane{len(cube_nmb)}', postion=(0, 0, 0), color=rgb(r, g, b),
+        cube1 = Draggable(parent=scene, model='plane', name=f'Plane{len(cube_nmb)}', postion=(0, 0, 0), color=rgb(r, g, b), texture='new_texture',
                           lock=(lock_z, lock_y, lock_x))
         mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0), z=-1)
         mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0), x=-1)
@@ -81,7 +81,7 @@ def add():
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='cube', name=f'Quad{len(cube_nmb)}', postion=(0, 0, 0), color=rgb(r, g, b),
+        cube1 = Draggable(parent=scene, model='cube', name=f'Quad{len(cube_nmb)}', postion=(0, 0, 0), color=rgb(r, g, b), texture='new_texture',
                           lock=(lock_z, lock_y, lock_x))
         mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0), z=-1)
         mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0), x=-1)
@@ -403,7 +403,7 @@ cube_texture = Text(parent=left, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1)
 
 
 origin = Entity(model='quad', color=color.orange, scale=(.05, .05))
-slider = Slider(0, 250, text='Timeline', default=0, height=Text.size*2, width=Text.size*8, y=-.4, step=1, vertical=False)
+slider = Slider(1, 359, text='Timeline', default=0, height=Text.size*2, width=Text.size*8, y=-.4, step=1, vertical=False)
 runnig = False
 
 
@@ -446,12 +446,12 @@ def input(key):
             print(pe.brush_size)
 
     if held_keys['space']:
-        if runnig is False:
-            runnig = True
-            slider.value += 1
-            editor_camera.z = -slider.value
+        editor_camera.rotation_x = 27
+        if slider.value == 359:
+            print_on_screen("FINISH")
         else:
-            runnig = False
+            slider.value += 1
+            editor_camera.rotation_y += -1
 
     if held_keys['left arrow']:
         slider.value -= 1
