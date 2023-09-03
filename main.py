@@ -161,6 +161,28 @@ def add():
     print(len(cube_nmb))
 
 
+def rename_object():
+    def hide_w():
+        destroy(wp)
+
+    object_name = InputField(text='Object1')
+
+    def chg_name():
+        global cube1
+        for cube1 in cube_nmb:
+            cube1.name = object_name.text
+
+    wp = WindowPanel(
+        title='Object Name',
+        content=(
+            Text('New Object Name:'),
+            object_name,
+            Button(text='Submit', color=color.azure, on_click=chg_name),
+            Button(text='Close', color=color.red, on_click=hide_w)
+        ),
+    )
+
+
 def remove_btn():
     global cube1
     for cube1 in cube_nmb:
@@ -451,7 +473,7 @@ axis_y = Entity(model='cube', scale=(0.05, 0.05, 50), color=color.green, rotatio
 axis_z = Entity(model='cube', scale=(0.05, 20, 0.05), color=color.blue, rotation=(0, 90, 0), y=10)
 
 Button(parent=footer, text="Add", scale=(0.1, 0.2), radius=0, x=-0.4, y=0.25, on_click=add)
-Button(parent=footer, text="Rename", scale=(0.1, 0.2), radius=0, x=-0.4, y=0)
+Button(parent=footer, text="Rename", scale=(0.1, 0.2), radius=0, x=-0.4, y=0, on_click=rename_object)
 Button(parent=footer, text="Remove", scale=(0.1, 0.2), radius=0, x=-0.4, y=-0.25, on_click=remove_btn)
 
 button_x = Button(parent=footer, text=f"X: 0.0", scale=(0.1, 0.2), radius=0, x=-0.25, y=0.25).alpha = 0
@@ -497,13 +519,13 @@ def input(key):
         lock_y = 0
         lock_z = 0
     if key == '2':
-        lock_y = 1
-        lock_x = 0
+        lock_y = 0
+        lock_x = 1
         lock_z = 0
     if key == '3':
-        lock_z = 1
+        lock_z = 0
         lock_y = 0
-        lock_x = 0
+        lock_x = 1
 
     if held_keys['shift'] and key == "q":
         add()
@@ -539,6 +561,8 @@ def input(key):
 
 
 def update():
+    global lock_x, lock_y, lock_z
+
     for cube1 in cube_nmb:
         cube1.lock = (lock_z, lock_y, lock_x)
         if mouse.hovered_entity == cube1:
