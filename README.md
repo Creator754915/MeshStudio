@@ -24,3 +24,6 @@ This software has several external features and plugins created by the community
 ## Updates
 
 ## Examples
+
+
+*Version BETA-1.3.0.0*
