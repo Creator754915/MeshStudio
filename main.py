@@ -10,12 +10,12 @@ from ursina.prefabs.health_bar import HealthBar
 from ursina.prefabs.video_recorder import VideoRecorderUI
 
 app = Ursina(size=(720, 480))
+window.title = "MeshStudio"
+window.icon = "meshstudio_logo.ico"
 window.fullscreen = False
 window.borderless = False
 window.exit_button.enabled = False
 window.fps_counter.enabled = False
-
-base = application.base
 
 editor_camera = EditorCamera()
 
@@ -211,6 +211,10 @@ def set_texture():
     )
 
 
+def open_sound_editor():
+    print("Coming soon...")
+
+
 def set_x():
     editor_camera.rotation = (0, 0, 0)
 
@@ -224,7 +228,9 @@ def set_z():
 
 
 def render_image():
-    editor_camera.position = 0, 10, 0
+    base = application.base
+
+    editor_camera.position = 0, 5, -24
 
     base.screenshot(namePrefix=f"render_{project_name}.png", defaultFilename=0)
     print_on_screen("Render finished !", scale=2, position=(-0.1, 0))
@@ -412,7 +418,7 @@ wp = WindowPanel(
         Text('Name:'),
         Button(text='General', color=color.azure, on_click=hide_w),
         Button(text='Texture Edit', color=color.azure, on_click=texture_edit),
-        Button(text='SFX', color=color.azure),
+        Button(text='SFX', color=color.azure, on_click=open_sound_editor),
         Button(text='Open', color=color.azure, on_click=open_project),
         Button(text='Close', color=color.red, on_click=hide_w)
     ),
@@ -431,7 +437,7 @@ file = DropdownMenu('File', buttons=(
     DropdownMenuButton('Preferences', on_click=preferences),
     DropdownMenuButton('Exit', on_click=application.quit),
 ))
-render = DropdownMenu('Render', buttons=(
+render_ui = DropdownMenu('Render', buttons=(
     DropdownMenuButton('Render Image', on_click=render_image),
     DropdownMenuButton('Render Video', on_click=render_video)
 ))
@@ -444,7 +450,7 @@ shaders = DropdownMenu('Shaders', buttons=(
     DropdownMenuButton('No Light'),
     DropdownMenuButton('With Light')
 ))
-render.x = -0.659
+render_ui.x = -0.659
 edit.x = -0.43
 shaders.x = -0.201
 
