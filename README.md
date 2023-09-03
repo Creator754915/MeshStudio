@@ -1,3 +1,4 @@
+![Oups something it's wrong...](https://github.com/Creator754915/MeshStudio/blob/main/meshstudio_logo.png?raw=true)
 # MeshStudio
 MeshStudio is a 3d software, texture editor and sound creator.
 
