@@ -1,4 +1,15 @@
-![Oups something it's wrong...](https://github.com/Creator754915/MeshStudio/blob/main/meshstudio_logo.png?raw=true)
+<p align="center">
+  <img src="meshstudio_logo.png">
+  <br>
+  <img src="https://img.shields.io/badge/Version-1.3.0.0-green?style=for-the-badge">
+  <br>
+  <img src="https://img.shields.io/badge/Author-Creator754915-blue?style=flat-square">
+  <img src="https://img.shields.io/badge/Open%20Source-Yes-darkgreen?style=flat-square">
+  <img src="https://img.shields.io/badge/Maintained%3F-Yes-lightblue?style=flat-square">
+  <img src="https://img.shields.io/badge/Written%20In-Python-darkcyan?style=flat-square">
+  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FCreator754915%2FMeshStudio&title=Visitors&edge_flat=false"/></a>
+</p>
+
 # MeshStudio
 MeshStudio is a 3d software, texture editor and sound creator.
 
