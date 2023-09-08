@@ -9,9 +9,9 @@ from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.health_bar import HealthBar
 from ursina.prefabs.video_recorder import VideoRecorderUI
 
-app = Ursina(size=(720, 480))
 window.title = "MeshStudio"
-window.icon = "meshstudio_logo.ico"
+window.icon = "meshstudio_logo.png"
+app = Ursina(size=(720, 480))
 window.fullscreen = False
 window.borderless = False
 window.exit_button.enabled = False
@@ -145,6 +145,7 @@ def add():
                 Button(text='Close', color=color.red, on_click=hide_cm)
             ),
         )
+        cm.y = wp.panel.scale_y / 2 * wp.scale_y
 
     wp = WindowPanel(
         title='Model',
@@ -158,6 +159,9 @@ def add():
             Button(text='Close', color=color.red, on_click=hide_w)
         ),
     )
+
+    wp.y = wp.panel.scale_y / 2 * wp.scale_y
+
     print(len(cube_nmb))
 
 
@@ -181,6 +185,8 @@ def rename_object():
             Button(text='Close', color=color.red, on_click=hide_w)
         ),
     )
+
+    wp.y = wp.panel.scale_y / 2 * wp.scale_y
 
 
 def remove_btn():
@@ -209,6 +215,8 @@ def set_texture():
             Button(text='Close', color=color.red, on_click=hide_w)
         ),
     )
+
+    wp.y = wp.panel.scale_y / 2 * wp.scale_y
 
 
 def open_sound_editor():
@@ -387,6 +395,15 @@ def texture_edit():
                          on_click=hide_pe, name='exit_button')
 
 
+def edit_mode():
+    def show_verts():
+        m = load_model("assets/models/cube.obj", use_deepcopy=True)
+        for t in m.vertices:
+            Entity(model=Circle(4), color=color.blue, scale=0.08, position=t)
+
+    show_verts()
+
+
 def preferences():
     def hide_w():
         destroy(wp)
@@ -443,7 +460,7 @@ render_ui = DropdownMenu('Render', buttons=(
 ))
 edit = DropdownMenu('Edit', buttons=(
     DropdownMenuButton('Object Mode'),
-    DropdownMenuButton('Edit Mode'),
+    DropdownMenuButton('Edit Mode', on_click=edit_mode),
     DropdownMenuButton('Edit Texture', on_click=texture_edit)
 ))
 shaders = DropdownMenu('Shaders', buttons=(
