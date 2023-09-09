@@ -1,7 +1,7 @@
 <p align="center">
   <img src="meshstudio_logo.png">
   <br>
-  <img src="https://img.shields.io/badge/Version-1.3.0.0-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Version-1.4.0.0-green?style=for-the-badge">
   <br>
   <img src="https://img.shields.io/badge/Author-Creator754915-blue?style=flat-square">
   <img src="https://img.shields.io/badge/Open%20Source-Yes-darkgreen?style=flat-square">
@@ -18,6 +18,10 @@ MeshStudio is a software created entirely with the Python and with Ursina Engine
 This software has several external features and plugins created by the community
 
 ## Features
+
+1) Modelisation
+2) Textures
+3) Lights
 
 **Keybinds**:
 
