@@ -25,7 +25,7 @@ This software has several external features and plugins created by the community
 
 <h3>Lights</h3>
 
-<img src="Features/light.png">
+<img src="Features/lights.png">
 
 **Keybinds**:
 
