@@ -1,12 +1,11 @@
 import json
+
 from PIL import Image
 from ursina import *
 from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu
 from ursina.prefabs.file_browser import FileBrowser
 from ursina.prefabs.file_browser_save import FileBrowserSave
-from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.prefabs.grid_editor import PixelEditor
-from ursina.prefabs.health_bar import HealthBar
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
 
@@ -25,9 +24,7 @@ editor_camera = EditorCamera()
 project_name = 'Scene1'
 name = 'Entity1'
 cube_nmb = []
-lock_x = 0
-lock_y = 0
-lock_z = 0
+lock_xyz = (0, 0, 0)
 
 empty_texture = Texture(Image.new(mode='RGBA',
                                   size=(32, 32),
@@ -43,7 +40,7 @@ def hide_w():
 
 
 def add():
-    def hide_w():
+    def hide_wp():
         destroy(wp)
 
     def cube():
@@ -52,13 +49,14 @@ def add():
         b = random.randint(0, 255)
         cube1 = Draggable(parent=scene, model='cube', name=f'Cube{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
-                          lock=(lock_z, lock_y, lock_x))
+                          lock=(0, 0, 0))
         mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
                              z=-1)
         mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
                              x=-1)
         mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.05, 1, 0.05), color=color.blue, rotation=(0, 90, 0),
                              y=1)
+
         cube_nmb.append(cube1)
         destroy(wp)
 
@@ -68,7 +66,7 @@ def add():
         b = random.randint(0, 255)
         cube1 = Draggable(parent=scene, model='sphere', name=f'Sphere{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
-                          lock=(lock_z, lock_y, lock_x))
+                          lock=(0, 0, 0))
         mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
                              z=-1)
         mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
@@ -84,7 +82,7 @@ def add():
         b = random.randint(0, 255)
         cube1 = Draggable(parent=scene, model='plane', name=f'Plane{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
-                          lock=(lock_z, lock_y, lock_x))
+                          lock=(0, 0, 0))
         mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
                              z=-1)
         mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
@@ -100,7 +98,7 @@ def add():
         b = random.randint(0, 255)
         cube1 = Draggable(parent=scene, model='cube', name=f'Quad{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
-                          lock=(lock_z, lock_y, lock_x))
+                          lock=(0, 0, 0))
         mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
                              z=-1)
         mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
@@ -159,7 +157,7 @@ def add():
             Button(text='Plane', color=color.azure, on_click=plane),
             Button(text='Quad', color=color.azure, on_click=quad),
             Button(text='Mesh', color=color.azure, on_click=mesh),
-            Button(text='Close', color=color.red, on_click=hide_w)
+            Button(text='Close', color=color.red, on_click=hide_wp)
         ),
     )
 
@@ -169,15 +167,14 @@ def add():
 
 
 def rename_object():
-    def hide_w():
+    def hide_wp():
         destroy(wp)
 
     object_name = InputField(text='Object1')
 
     def chg_name():
-        global cube1
-        for cube1 in cube_nmb:
-            cube1.name = object_name.text
+        for cube in cube_nmb:
+            cube.name = object_name.text
 
     wp = WindowPanel(
         title='Object Name',
@@ -185,7 +182,7 @@ def rename_object():
             Text('New Object Name:'),
             object_name,
             Button(text='Submit', color=color.azure, on_click=chg_name),
-            Button(text='Close', color=color.red, on_click=hide_w)
+            Button(text='Close', color=color.red, on_click=hide_wp)
         ),
     )
 
@@ -193,17 +190,16 @@ def rename_object():
 
 
 def remove_btn():
-    global cube1
-    for cube1 in cube_nmb:
-        cube_nmb.remove(cube1)
-        destroy(cube1)
+    for cube in cube_nmb:
+        cube_nmb.remove(cube)
+        destroy(cube)
 
 
 def set_texture():
-    def hide_w():
+    def hide_wp():
         destroy(wp)
 
-    def texture():
+    def textures():
         for cube1 in cube_nmb:
             cube1.texture = texture_name.text
 
@@ -214,8 +210,8 @@ def set_texture():
         content=(
             Text('Texture Path:'),
             texture_name,
-            Button(text='Submit', color=color.azure, on_click=texture),
-            Button(text='Close', color=color.red, on_click=hide_w)
+            Button(text='Submit', color=color.azure, on_click=textures),
+            Button(text='Close', color=color.red, on_click=hide_wp)
         ),
     )
 
@@ -253,7 +249,7 @@ def render_video():
 
 
 def open_model_obj():
-    fb = FileBrowser(file_types=('.obj'), enabled=True)
+    fb = FileBrowser(file_types='.obj', enabled=True)
 
     def on_submit(paths):
         print('--------', paths)
@@ -266,7 +262,7 @@ def open_model_obj():
 
 
 def open_model_gltf():
-    fb = FileBrowser(file_types=('.gltf'), enabled=True)
+    fb = FileBrowser(file_types='.gltf', enabled=True)
 
     def on_submit(paths):
         print('--------', paths)
@@ -280,16 +276,16 @@ def open_model_gltf():
 
 
 def rename_project():
+    def hide_wp():
+        destroy(wp)
+
     def rename_w():
         global project_name
-        text = name_input.text
-        if len(text) <= 9:
-            project_name = text
+        new_project_name = name_input.text
+        if len(new_project_name) <= 9:
+            project_name = new_project_name
         else:
             print_on_screen(text="Your name is too long", scale=2, position=(-0.2, 0, 0))
-
-    def hide_w():
-        destroy(wp)
 
     name_input = InputField(name='name_field')
 
@@ -299,16 +295,15 @@ def rename_project():
             Text('Name:'),
             name_input,
             Button(text='Submit', color=color.azure, on_click=rename_w),
-            Button(text='Close', color=color.red, on_click=hide_w)
+            Button(text='Close', color=color.red, on_click=hide_wp)
         ),
     )
     wp.y = wp.panel.scale_y / 2 * wp.scale_y  # center the window panel
 
 
 def open_project():
-
     destroy(wp)
-    fb = FileBrowser(file_types=('.msstd'), enabled=True, z=-5)
+    fb = FileBrowser(file_types='.msstd', enabled=True, z=-5)
 
     def on_submit(paths):
         global project_name, editor_camera
@@ -333,6 +328,7 @@ def open_project():
             except:
                 print_warning("Your project is corrupt !")
                 print_on_screen("Your project is corrupt !", scale=2, position=(-0.3, 0))
+
     fb.on_submit = on_submit
 
 
@@ -408,6 +404,7 @@ def edit_mode():
 
 
 def shaders_active():
+    global sun_l
     axis_x.visible = False
     axis_y.visible = False
     axis_z.visible = False
@@ -420,21 +417,23 @@ def shaders_active():
 
     Entity(model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader)
 
-    Sun(target=origin)
+    sun_l = Sun(target=origin)
 
 
 def shaders_desactive():
-    axis_x.visible = False
-    axis_y.visible = False
-    axis_z.visible = False
-    floor.visible = False
-    footer.visible = False
-    slider.visible = False
-    left.visible = False
+    axis_x.visible = True
+    axis_y.visible = True
+    axis_z.visible = True
+    floor.visible = True
+    footer.visible = True
+    slider.visible = True
+    left.visible = True
+
+    destroy(sun_l)
 
 
 def preferences():
-    def hide_w():
+    def hide_wp():
         destroy(wp)
 
     fov_slider = Slider(0, 180)
@@ -451,7 +450,7 @@ def preferences():
             Text('Camera FOV'),
             fov_slider,
             Button(text='Save', color=color.azure),
-            Button(text='Close', color=color.red, on_click=hide_w)
+            Button(text='Close', color=color.red, on_click=hide_wp)
         ),
     )
 
@@ -560,24 +559,16 @@ runnig = False
 
 
 def input(key):
-    global lock_x, lock_y, lock_z, runnig
+    global lock_xyz
     print(key)
     if key == '0':
-        lock_x = 0
-        lock_y = 0
-        lock_z = 0
+        lock_xyz = (0, 0, 0)
     if key == '1':
-        lock_x = 1
-        lock_y = 0
-        lock_z = 0
+        lock_xyz = (1, 0, 0)
     if key == '2':
-        lock_y = 0
-        lock_x = 1
-        lock_z = 0
+        lock_xyz = (0, 1, 0)
     if key == '3':
-        lock_z = 0
-        lock_y = 0
-        lock_x = 1
+        lock_xyz = (0, 0, 1)
 
     if held_keys['shift'] and key == "q":
         add()
@@ -607,31 +598,43 @@ def input(key):
 
     if held_keys['left arrow']:
         slider.value -= 1
+        for cube in cube_nmb:
+            cube.z += 0.5
 
     if held_keys['right arrow']:
         slider.value += 1
+        for cube in cube_nmb:
+            cube.z -= 0.5
+
+    if held_keys['up arrow']:
+        for cube in cube_nmb:
+            cube.x += 0.5
+
+    if held_keys['down arrow']:
+        for cube in cube_nmb:
+            cube.x -= 0.5
 
 
 def update():
-    global lock_x, lock_y, lock_z
+    global lock_xyz
 
-    for cube1 in cube_nmb:
-        cube1.lock = (lock_z, lock_y, lock_x)
-        if mouse.hovered_entity == cube1:
-            print(cube1.name)
-            cube_text.text = f'Object Name: {cube1.name}'
-            cube_position.text = f'Object Position: {round(cube1.x, 2)}, {round(cube1.y, 2)}, {round(cube1.z, 2)}'
-            cube_scale.text = f'Object Scale: {round(cube1.scale_x, 2)}, {round(cube1.scale_y, 2)}, {round(cube1.scale_z, 2)}'
-            cube_texture.text = f'Object Texture: {cube1.texture}'
+    for cube in cube_nmb:
+        # cube1.lock = lock_xyz
+        if mouse.hovered_entity == cube:
+            print(cube.name)
+            cube_text.text = f'Object Name: {cube.name}'
+            cube_position.text = f'Object Position: {round(cube.x, 2)}, {round(cube.y, 2)}, {round(cube.z, 2)}'
+            cube_scale.text = f'Object Scale: {round(cube.scale_x, 2)}, {round(cube.scale_y, 2)}, {round(cube.scale_z, 2)}'
+            cube_texture.text = f'Object Texture: {cube.texture}'
 
     if held_keys['s']:
-        for cube1 in cube_nmb:
-            if mouse.hovered_entity == cube1:
-                cube1.scale = (mouse.x * 10, mouse.y * 10, mouse.x * 10)
+        for cube in cube_nmb:
+            if mouse.hovered_entity == cube:
+                cube.scale = (mouse.x * 10, mouse.y * 10, mouse.x * 10)
 
     project_text.text = f'Project Name: {project_name}'
     camera_text.text = f'Camera Position: {round(camera.x)}, {round(camera.y)}, {round(camera.z)}'
-    camera_rotation.text = f'Camera Rotation: X: {round(editor_camera.rotation_x)} Y: {round(editor_camera.rotation_y)} Z: {round(editor_camera.rotation_z)}'
+    camera_rotation.text = f'Camera Rotation: X: {round(editor_camera.rotation_x)} Y: {round(editor_camera.rotation_y)} Z: {round(editor_camera.rotation_z)} '
 
 
 app.run()
