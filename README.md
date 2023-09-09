@@ -19,9 +19,13 @@ This software has several external features and plugins created by the community
 
 ## Features
 
-1) Modelisation
-2) Textures
-3) Lights
+<h3>Modilisation</h3>
+
+<img src="Features/general.png">
+
+<h3>Lights</h3>
+
+<img src="Features/light.png">
 
 **Keybinds**:
 
