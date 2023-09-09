@@ -8,6 +8,9 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.health_bar import HealthBar
 from ursina.prefabs.video_recorder import VideoRecorderUI
+from ursina.shaders import lit_with_shadows_shader
+
+from sun import Sun
 
 window.title = "MeshStudio"
 window.icon = "meshstudio_logo.png"
@@ -404,6 +407,32 @@ def edit_mode():
     show_verts()
 
 
+def shaders_active():
+    axis_x.visible = False
+    axis_y.visible = False
+    axis_z.visible = False
+    floor.visible = False
+    footer.visible = False
+    slider.visible = False
+    left.visible = False
+
+    EditorCamera()
+
+    Entity(model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader)
+
+    Sun(target=origin)
+
+
+def shaders_desactive():
+    axis_x.visible = False
+    axis_y.visible = False
+    axis_z.visible = False
+    floor.visible = False
+    footer.visible = False
+    slider.visible = False
+    left.visible = False
+
+
 def preferences():
     def hide_w():
         destroy(wp)
@@ -464,8 +493,8 @@ edit = DropdownMenu('Edit', buttons=(
     DropdownMenuButton('Edit Texture', on_click=texture_edit)
 ))
 shaders = DropdownMenu('Shaders', buttons=(
-    DropdownMenuButton('No Light'),
-    DropdownMenuButton('With Light')
+    DropdownMenuButton('No Light', on_click=shaders_desactive),
+    DropdownMenuButton('With Light', on_click=shaders_active)
 ))
 render_ui.x = -0.659
 edit.x = -0.43
