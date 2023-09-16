@@ -403,6 +403,9 @@ def edit_mode():
     show_verts()
 
 
+plane = Entity(model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader, visible=False)
+
+
 def shaders_active():
     global sun_l
     axis_x.visible = False
@@ -415,7 +418,7 @@ def shaders_active():
 
     EditorCamera()
 
-    Entity(model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader)
+    plane.visible = True
 
     sun_l = Sun(target=origin)
 
@@ -428,6 +431,8 @@ def shaders_desactive():
     footer.visible = True
     slider.visible = True
     left.visible = True
+
+    plane.visible = False
 
     destroy(sun_l)
 
