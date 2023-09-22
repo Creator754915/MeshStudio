@@ -29,10 +29,8 @@ lock_xyz = (0, 0, 0)
 empty_texture = Texture(Image.new(mode='RGBA',
                                   size=(32, 32),
                                   color=(255, 255, 255, 255)))
-pe = PixelEditor(texture=empty_texture, brush_size=1, z=-2)
+pe = PixelEditor(texture=empty_texture, brush_size=1, z=-2, visible=False, enabled=False)
 pe.help_text.visible = False
-pe.visible = False
-pe.enabled = False
 
 
 def hide_w():
@@ -99,12 +97,9 @@ def add():
         cube1 = Draggable(parent=scene, model='cube', name=f'Quad{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
                           lock=(0, 0, 0))
-        mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
-                             z=-1)
-        mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
-                             x=-1)
-        mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.05, 1, 0.05), color=color.blue, rotation=(0, 90, 0),
-                             y=1)
+        Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0), z=-1)
+        Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0), x=-1)
+        Button(parent=cube1, model='cube', scale=(0.05, 1, 0.05), color=color.blue, rotation=(0, 90, 0), y=1)
         cube_nmb.append(cube1)
         destroy(wp)
 
@@ -298,7 +293,7 @@ def rename_project():
             Button(text='Close', color=color.red, on_click=hide_wp)
         ),
     )
-    wp.y = wp.panel.scale_y / 2 * wp.scale_y  # center the window panel
+    wp.y = wp.panel.scale_y / 2 * wp.scale_y
 
 
 def open_project():
@@ -357,11 +352,20 @@ def save_project():
     wp.data = json.dumps(save_data)
 
 
+def general_mode():
+    axis_x.visible = True
+    axis_y.visible = True
+    axis_z.visible = True
+    floor.visible = True
+    footer.visible = True
+    slider.visible = True
+    left.visible = True
+
+
 def texture_edit():
     def hide_pe():
         destroy(exit_button)
-        pe.enabled = False
-        pe.visible = False
+        pe.visible, pe.enabled = False
 
         empty_texture.save("new_texture.png")
 
@@ -395,19 +399,26 @@ def texture_edit():
 
 
 def edit_mode():
-    def show_verts():
-        m = load_model("assets/models/cube.obj", use_deepcopy=True)
+    def show_vert():
+        axis_x.visible = False
+        axis_y.visible = False
+        axis_z.visible = False
+        floor.visible = False
+        footer.visible = False
+        slider.visible = False
+        left.visible = False
+
+        m = load_model("assets/models/pistol.obj", use_deepcopy=True)
         for t in m.vertices:
-            Entity(model=Circle(4), color=color.blue, scale=0.08, position=t)
+            Entity(model="cube", color=color.blue, scale=0.08, position=t)
 
-    show_verts()
+    show_vert()
 
 
-plane = Entity(model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader, visible=False)
+plane = Entity(name="plane_shaders", model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader, visible=False)
 
 
 def shaders_active():
-    global sun_l
     axis_x.visible = False
     axis_y.visible = False
     axis_z.visible = False
@@ -420,7 +431,7 @@ def shaders_active():
 
     plane.visible = True
 
-    sun_l = Sun(target=origin)
+    Sun(target=origin)
 
 
 def shaders_desactive():
@@ -432,20 +443,19 @@ def shaders_desactive():
     slider.visible = True
     left.visible = True
 
-    plane.visible = False
-
-    destroy(sun_l)
+    destroy(plane)
+    destroy(Sun)
 
 
 def preferences():
-    def hide_wp():
-        destroy(wp)
+    def hide_wpr():
+        destroy(wpr)
 
     fov_slider = Slider(0, 180)
     project_input = InputField()
     plugin_input = InputField()
 
-    wp = WindowPanel(
+    wpr = WindowPanel(
         title='Preferences',
         content=(
             Text('Project Path'),
@@ -455,11 +465,11 @@ def preferences():
             Text('Camera FOV'),
             fov_slider,
             Button(text='Save', color=color.azure),
-            Button(text='Close', color=color.red, on_click=hide_wp)
+            Button(text='Close', color=color.red, on_click=hide_wpr)
         ),
     )
 
-    wp.y = wp.panel.scale_y / 2 * wp.scale_y
+    wpr.y = wpr.panel.scale_y / 2 * wpr.scale_y
 
 
 wp = WindowPanel(
@@ -492,7 +502,7 @@ render_ui = DropdownMenu('Render', buttons=(
     DropdownMenuButton('Render Video', on_click=render_video)
 ))
 edit = DropdownMenu('Edit', buttons=(
-    DropdownMenuButton('Object Mode'),
+    DropdownMenuButton('Object Mode', on_click=general_mode),
     DropdownMenuButton('Edit Mode', on_click=edit_mode),
     DropdownMenuButton('Edit Texture', on_click=texture_edit)
 ))
@@ -556,8 +566,9 @@ camera_rotation = Text(parent=left, text=f'Camera Position: {camera.rotation}', 
 Text(parent=left, text='Object Info', scale=(3, 1.5), x=-0.20, y=0.04, z=-1)
 cube_text = Text(parent=left, text=f'Object Name: None', scale=(2.5, 1), x=-0.5, y=-0.01, z=-1)
 cube_position = Text(parent=left, text=f'Object Position: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.04, z=-1)
-cube_scale = Text(parent=left, text=f'Object Scale: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.07, z=-1)
-cube_texture = Text(parent=left, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.1, z=-1)
+cube_rotation = Text(parent=left, text=f'Object Rotation: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.07, z=-1)
+cube_scale = Text(parent=left, text=f'Object Scale: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.1, z=-1)
+cube_texture = Text(parent=left, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.125, z=-1)
 
 origin = Entity(model='quad', color=color.orange, scale=(.05, .05))
 runnig = False
@@ -602,22 +613,20 @@ def input(key):
             editor_camera.rotation_y += -1
 
     if held_keys['left arrow']:
-        slider.value -= 1
         for cube in cube_nmb:
-            cube.z += 0.5
+            cube.rotation_y -= 1
 
     if held_keys['right arrow']:
-        slider.value += 1
         for cube in cube_nmb:
-            cube.z -= 0.5
+            cube.rotation_y += 0.5
 
     if held_keys['up arrow']:
         for cube in cube_nmb:
-            cube.x += 0.5
+            cube.rotation_x -= 1
 
     if held_keys['down arrow']:
         for cube in cube_nmb:
-            cube.x -= 0.5
+            cube.rotation_x += 1
 
 
 def update():
@@ -629,6 +638,7 @@ def update():
             print(cube.name)
             cube_text.text = f'Object Name: {cube.name}'
             cube_position.text = f'Object Position: {round(cube.x, 2)}, {round(cube.y, 2)}, {round(cube.z, 2)}'
+            cube_rotation.text = f'Object Rotation: {round(cube.rotation_x, 2)}, {round(cube.rotation_y, 2)}, {round(cube.rotation_z, 2)} '
             cube_scale.text = f'Object Scale: {round(cube.scale_x, 2)}, {round(cube.scale_y, 2)}, {round(cube.scale_z, 2)}'
             cube_texture.text = f'Object Texture: {cube.texture}'
 
