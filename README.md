@@ -47,6 +47,16 @@ This software has several external features and plugins created by the community
 
 ## Updates
 
+### Patch 1.0.0
+
+**New features**:
+   1. Rotate cube with the **arrows**
+   2. Export model **OBJ** and **GLTF**
+   3. Show **vertices** of cubes 
+
+**Patch**:
+   1. Fixed **multiple panel** open
+
 ## Examples
 
 
