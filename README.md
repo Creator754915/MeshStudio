@@ -19,31 +19,35 @@ This software has several external features and plugins created by the community
 
 ## Features
 
-<h3>Modilisation</h3>
+<h2>Modilisation</h2>
 
 <img src="Features/general.png">
 
-<h3>Lights</h3>
+<h2>Lights</h2>
 
 <img src="Features/lights.png">
 
 **Keybinds**:
 
-  shift + a: Add an object
+  **shift + a**: Add an object
   
-  shift + t: Modify the texture path
+  **shift + t**: Modify the texture path
   
-  shift + s: Save project
+  **shift + s**: Save project
   
-  shift + o: Open project
+  **shift + o**: Open project
 
-  ctrl + scroll up: + size to texture brush
+  **left arrow / right arrow**: rotate object in the Y axis
+
+  **up arrow / down arrow**: rotate object in the X axis
+
+  **ctrl + scroll up**: + size to texture brush
   
-  ctrl + scroll down: - size to texture brush
+  **ctrl + scroll down**: - size to texture brush
 
 ## Updates
 
 ## Examples
 
 
-*Version BETA-1.3.0.0*
+*Version BETA-1.4.0.0*
