@@ -21,7 +21,7 @@ This software has several external features and plugins created by the community
 
 <h2>Modilisation</h2>
 
-<img src="Features/eneral.png">
+<img src="Features/general.png">
 
 <h2>Lights</h2>
 
