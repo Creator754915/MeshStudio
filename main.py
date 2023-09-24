@@ -415,7 +415,8 @@ def edit_mode():
     show_vert()
 
 
-plane = Entity(name="plane_shaders", model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader, visible=False)
+plane = Entity(name="plane_shaders", model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader,
+               visible=False)
 
 
 def shaders_active():
@@ -429,6 +430,7 @@ def shaders_active():
 
     EditorCamera()
 
+    plane.visible = True
     plane.visible = True
 
     Sun(target=origin)
@@ -444,7 +446,8 @@ def shaders_desactive():
     left.visible = True
 
     destroy(plane)
-    destroy(Sun)
+
+    Entity.shader = None
 
 
 def preferences():
@@ -641,6 +644,17 @@ def update():
             cube_rotation.text = f'Object Rotation: {round(cube.rotation_x, 2)}, {round(cube.rotation_y, 2)}, {round(cube.rotation_z, 2)} '
             cube_scale.text = f'Object Scale: {round(cube.scale_x, 2)}, {round(cube.scale_y, 2)}, {round(cube.scale_z, 2)}'
             cube_texture.text = f'Object Texture: {cube.texture}'
+
+            # tooltip_test = Tooltip(
+            # '<scale:1.2><gray>' + f'{cube.name}' + '<scale:1> \n \n' +
+            # f'''Scale: {cube.scale}\n
+            # Position: {cube.position}
+            # ''',
+            # background_color=color.black33,
+            # font='VeraMono.ttf',
+            # wordwrap=30,
+            # )
+            # cube.tooltip = tooltip_test
 
     if held_keys['s']:
         for cube in cube_nmb:
