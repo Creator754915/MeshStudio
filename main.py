@@ -2,6 +2,7 @@ import json
 
 from PIL import Image
 from ursina import *
+from ursina import Entity
 from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu
 from ursina.prefabs.file_browser import FileBrowser
 from ursina.prefabs.file_browser_save import FileBrowserSave
@@ -26,6 +27,8 @@ name = 'Entity1'
 cube_nmb = []
 lock_xyz = (0, 0, 0)
 
+timeline_speed = 1
+
 empty_texture = Texture(Image.new(mode='RGBA',
                                   size=(32, 32),
                                   color=(255, 255, 255, 255)))
@@ -48,12 +51,17 @@ def add():
         cube1 = Draggable(parent=scene, model='cube', name=f'Cube{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
                           lock=(0, 0, 0))
-        mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
+        mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0),
                              z=-1)
-        mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
+        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
+
+        mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0),
                              x=-1)
-        mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.05, 1, 0.05), color=color.blue, rotation=(0, 90, 0),
+        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
+
+        mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0),
                              y=1)
+        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
 
         cube_nmb.append(cube1)
         destroy(wp)
@@ -65,12 +73,17 @@ def add():
         cube1 = Draggable(parent=scene, model='sphere', name=f'Sphere{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
                           lock=(0, 0, 0))
-        mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
+        mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0),
                              z=-1)
-        mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
+        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
+
+        mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0),
                              x=-1)
-        mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.05, 1, 0.05), color=color.blue, rotation=(0, 90, 0),
+        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
+
+        mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0),
                              y=1)
+        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
         cube_nmb.append(cube1)
         destroy(wp)
 
@@ -81,12 +94,17 @@ def add():
         cube1 = Draggable(parent=scene, model='plane', name=f'Plane{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
                           lock=(0, 0, 0))
-        mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0),
+        mesh_axis_x = Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0),
                              z=-1)
-        mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0),
+        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
+
+        mesh_axis_y = Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0),
                              x=-1)
-        mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.05, 1, 0.05), color=color.blue, rotation=(0, 90, 0),
+        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
+
+        mesh_axis_z = Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0),
                              y=1)
+        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
         cube_nmb.append(cube1)
         destroy(wp)
 
@@ -97,9 +115,15 @@ def add():
         cube1 = Draggable(parent=scene, model='cube', name=f'Quad{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='new_texture',
                           lock=(0, 0, 0))
-        Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.red, rotation=(0, 0, 0), z=-1)
-        Button(parent=cube1, model='cube', scale=(0.05, 0.05, 1), color=color.green, rotation=(0, 90, 0), x=-1)
-        Button(parent=cube1, model='cube', scale=(0.05, 1, 0.05), color=color.blue, rotation=(0, 90, 0), y=1)
+        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0), z=-1)
+        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
+
+        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0), x=-1)
+        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
+
+        Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0), y=1)
+        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
+
         cube_nmb.append(cube1)
         destroy(wp)
 
@@ -250,7 +274,7 @@ def open_model_obj():
         print('--------', paths)
         for p in paths:
             print('---', p)
-            model1 = Draggable(parent=scene, model=f'{p}', color=color.blue, scale=(2, 2, 2), position=(0, 0, 0))
+            model1 = load_model(p, use_deepcopy=True)
             print(model1.model)
 
     fb.on_submit = on_submit
@@ -263,8 +287,7 @@ def open_model_gltf():
         print('--------', paths)
         for p in paths:
             print('---', p)
-            model1 = Draggable(parent=scene, model=f'assets/models/zombie.gltf', color=color.blue, scale=(2, 2, 2),
-                               position=(0, 0, 0))
+            model1 = load_model(p, use_deepcopy=True)
             print(model1.model)
 
     fb.on_submit = on_submit
@@ -408,9 +431,9 @@ def edit_mode():
         slider.visible = False
         left.visible = False
 
-        m = load_model("assets/models/pistol.obj", use_deepcopy=True)
+        m = load_model("assets/models/cube.obj", use_deepcopy=True)
         for t in m.vertices:
-            Entity(model="cube", color=color.blue, scale=0.08, position=t)
+            Draggable(parent=scene, model="cube", color=color.blue, scale=0.08, position=t)
 
     show_vert()
 
@@ -420,6 +443,7 @@ plane = Entity(name="plane_shaders", model='plane', scale=20, color=color.gray, 
 
 
 def shaders_active():
+    global sun_l
     axis_x.visible = False
     axis_y.visible = False
     axis_z.visible = False
@@ -431,12 +455,12 @@ def shaders_active():
     EditorCamera()
 
     plane.visible = True
-    plane.visible = True
 
-    Sun(target=origin)
+    sun_l = Sun(target=origin)
 
 
 def shaders_desactive():
+    global sun_l
     axis_x.visible = True
     axis_y.visible = True
     axis_z.visible = True
@@ -445,9 +469,9 @@ def shaders_desactive():
     slider.visible = True
     left.visible = True
 
-    destroy(plane)
+    plane.visible = False
 
-    Entity.shader = None
+    destroy(sun_l)
 
 
 def preferences():
@@ -475,6 +499,34 @@ def preferences():
     wpr.y = wpr.panel.scale_y / 2 * wpr.scale_y
 
 
+def timeline_options():
+    def hide_wpt():
+        destroy(wpt)
+
+    def apply():
+        global timeline_speed
+        timeline_speed = speed_slider.value
+
+        hide_wpt()
+
+    step_slider = Slider(.1, 3)
+    speed_slider = Slider(0.5, 5, step=0.5)
+
+    wpt = WindowPanel(
+        title='Timeline Options',
+        content=(
+            Text('Timeline Step'),
+            step_slider,
+            Text('Animation Speed'),
+            speed_slider,
+            Button(text='Apply', color=color.azure, on_click=apply),
+            Button(text='Close', color=color.red, on_click=hide_wpt)
+        ),
+    )
+
+    wpt.y = wpt.panel.scale_y / 2 * wpt.scale_y
+
+
 wp = WindowPanel(
     title='Info Project',
     content=(
@@ -492,13 +544,14 @@ file = DropdownMenu('File', buttons=(
     DropdownMenuButton('New'),
     DropdownMenuButton('Open', on_click=open_project),
     DropdownMenuButton('Rename Project', on_click=rename_project),
-    DropdownMenuButton('Save', on_click=save_project),
+    DropdownMenuButton('Save', color=color.rgb(0, 100, 0), on_click=save_project),
     DropdownMenu('Import', buttons=(
         DropdownMenuButton('OBJ', on_click=open_model_obj),
         DropdownMenuButton('GLTF', on_click=open_model_gltf),
     )),
     DropdownMenuButton('Preferences', on_click=preferences),
-    DropdownMenuButton('Exit', on_click=application.quit),
+    DropdownMenuButton('Timeline Options', on_click=timeline_options),
+    DropdownMenuButton('Exit', color=color.rgb(75, 0, 0), on_click=application.quit),
 ))
 render_ui = DropdownMenu('Render', buttons=(
     DropdownMenuButton('Render Image', on_click=render_image),
@@ -525,10 +578,9 @@ left = Entity(parent=camera.ui, scale=(0.3, 0.9), model=Quad(aspect=3, radius=0)
 Text(
     text=dedent('''
                shift + a:            object panel
-               ctrl + scroll up:     + size to texture brush
-               ctrl + scroll down:   - size to texture brush
                ctrl + o:             open project
                ctrl + s:             save project
+               ctrl + t:             set texture
            '''),
     position=(-0.89, 0.39),
     scale=.75,
@@ -556,6 +608,8 @@ Button(parent=footer, text="Z", scale=(0.1, 0.2), radius=0, x=-0.15, y=-0.25, on
 slider = Slider(1, 359, text='Timeline', default=0, height=Text.size * 2, width=Text.size * 8, y=-.4, step=1,
                 vertical=False)
 
+Button(parent=footer, texture="icons/icon_keyframes.png", scale=(.1, .5), radius=0,  x=0.32)
+
 # Left
 
 Text(parent=left, text='Project Info', scale=(3, 1.5), x=-0.22, y=0.33, z=-1)
@@ -580,14 +634,14 @@ runnig = False
 def input(key):
     global lock_xyz
     print(key)
-    if key == '0':
-        lock_xyz = (0, 0, 0)
-    if key == '1':
-        lock_xyz = (1, 0, 0)
-    if key == '2':
-        lock_xyz = (0, 1, 0)
-    if key == '3':
-        lock_xyz = (0, 0, 1)
+    # if key == '0':
+    #     lock_xyz = (0, 0, 0)
+    # if key == '1':
+    #     lock_xyz = (1, 0, 0)
+    # if key == '2':
+    #     lock_xyz = (0, 1, 0)
+    # if key == '3':
+    #     lock_xyz = (0, 0, 1)
 
     if held_keys['shift'] and key == "q":
         add()
@@ -612,8 +666,8 @@ def input(key):
         if slider.value == 359:
             print_on_screen("FINISH")
         else:
-            slider.value += 1
-            editor_camera.rotation_y += -1
+            slider.value += timeline_speed
+            editor_camera.rotation_y += -timeline_speed
 
     if held_keys['left arrow']:
         for cube in cube_nmb:
@@ -632,8 +686,27 @@ def input(key):
             cube.rotation_x += 1
 
 
+rot = False
+
+rot_x = Entity(model=Circle(14, mode='line', thickness=8), scale=(1.5, 1.5, 1.5),
+               color=color.red,
+               position=(0, 0, 0),
+               rotation=(0, 90, 0),
+               visible=False)
+rot_y = Entity(model=Circle(14, mode='line', thickness=8), scale=(1.5, 1.5, 1.5),
+               color=color.green,
+               position=(0, 0, 0),
+               rotation=(0, 0, 0),
+               visible=False)
+rot_z = Entity(model=Circle(14, mode='line', thickness=8), scale=(1.5, 1.5, 1.5),
+               color=color.blue,
+               position=(0, 0, 0),
+               rotation=(90, 0, 0),
+               visible=False)
+
+
 def update():
-    global lock_xyz
+    global lock_xyz, rot
 
     for cube in cube_nmb:
         # cube1.lock = lock_xyz
@@ -646,20 +719,34 @@ def update():
             cube_texture.text = f'Object Texture: {cube.texture}'
 
             # tooltip_test = Tooltip(
-            # '<scale:1.2><gray>' + f'{cube.name}' + '<scale:1> \n \n' +
-            # f'''Scale: {cube.scale}\n
-            # Position: {cube.position}
+            #    f'''<scale:1.2><gray> {cube.name} <scale:1>
+            #    Scale: {cube.scale}
+            #    Position: {cube.position}
             # ''',
-            # background_color=color.black33,
-            # font='VeraMono.ttf',
-            # wordwrap=30,
+            #    background_color=color.black33,
+            #    font='VeraMono.ttf',
+            #    wordwrap=30,
             # )
             # cube.tooltip = tooltip_test
 
     if held_keys['s']:
         for cube in cube_nmb:
             if mouse.hovered_entity == cube:
-                cube.scale = (mouse.x * 10, mouse.y * 10, mouse.x * 10)
+                cube.scale = (mouse.x * 50, mouse.y * 10, mouse.x * 10)
+
+    if held_keys['r']:
+        for cube in cube_nmb:
+            if mouse.hovered_entity == cube and rot is False:
+                rot_x.visible, rot_x.parent = True, cube
+                rot_y.visible, rot_y.parent = True, cube
+                rot_z.visible, rot_z.parent = True, cube
+                rot = True
+
+            else:
+                rot_x.visible = False
+                rot_y.visible = False
+                rot_z.visible = False
+                rot = False
 
     project_text.text = f'Project Name: {project_name}'
     camera_text.text = f'Camera Position: {round(camera.x)}, {round(camera.y)}, {round(camera.z)}'
