@@ -287,8 +287,8 @@ def open_model_gltf():
         print('--------', paths)
         for p in paths:
             print('---', p)
-            model1 = load_model(p, use_deepcopy=True)
-            print(model1.model)
+            model1 = load_model(p.name, use_deepcopy=True)
+            print(model1)
 
     fb.on_submit = on_submit
 
