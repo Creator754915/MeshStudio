@@ -30,6 +30,8 @@ This software has several external features and plugins created by the community
 **Keybinds**:
 
   **shift + a**: Add an object
+
+  **shift + r**: Rotate object
   
   **shift + t**: Modify the texture path
   
@@ -46,6 +48,17 @@ This software has several external features and plugins created by the community
   **ctrl + scroll down**: - size to texture brush
 
 ## Updates
+
+### Patch 1.1.0
+
+**New features**:
+   1. Rotate cube with new **gismoz**
+   2. New **gismoz** for the **position** and for the **rotation**
+   3. New **timeline system** with Panel
+
+**Patch**:
+   1. **Crash** when you try to **import object**
+
 
 ### Patch 1.0.0
 
