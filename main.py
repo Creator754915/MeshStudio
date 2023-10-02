@@ -9,6 +9,7 @@ from ursina.prefabs.file_browser_save import FileBrowserSave
 from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
+from Ursina.More.UI import ClickPanel
 
 from sun import Sun
 
@@ -348,7 +349,6 @@ def open_project():
                 print_on_screen("Your project is corrupt !", scale=2, position=(-0.3, 0))
 
     fb.on_submit = on_submit
-
 
 def save_project():
     wp = FileBrowserSave(file_type='.msstd', z=-5)
@@ -703,6 +703,8 @@ rot_z = Entity(model=Circle(14, mode='line', thickness=8), scale=(1.5, 1.5, 1.5)
                position=(0, 0, 0),
                rotation=(90, 0, 0),
                visible=False)
+
+ClickPanel()
 
 
 def update():
