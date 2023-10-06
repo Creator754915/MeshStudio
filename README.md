@@ -19,13 +19,29 @@ This software has several external features and plugins created by the community
 
 ## Features
 
-<h2>Modilisation</h2>
+<h2>General UI</h2>
 
-<img src="Features/general.png">
+![New UI](https://github.com/Creator754915/MeshStudio/assets/106489587/b7ebed94-035a-4d13-867d-d7798e98c6a1)
 
 <h2>Lights</h2>
 
 <img src="Features/lights.png">
+
+<h2>Modelisation</h2>
+
+![model](https://github.com/Creator754915/MeshStudio/assets/106489587/47d05ec8-ba7e-45b2-ae47-f624e8691627)
+
+<h2>Timeline</h2>
+
+![Timeline](https://github.com/Creator754915/MeshStudio/assets/106489587/88f59e51-8996-432a-a636-745f3b45d85c)
+
+<h2>Texture Editor</h2>
+
+![Texture Editor](https://github.com/Creator754915/MeshStudio/assets/106489587/82d9cae4-7b41-4da3-8009-9d6dc23063e8)
+
+<p>Coming soon...</p>
+
+
 
 **Keybinds**:
 
