@@ -1,7 +1,7 @@
 <p align="center">
   <img src="meshstudio_logo.png">
   <br>
-  <img src="https://img.shields.io/badge/Version-1.4.0.0-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Version-1.4.5.0-green?style=for-the-badge">
   <br>
   <img src="https://img.shields.io/badge/Author-Creator754915-blue?style=flat-square">
   <img src="https://img.shields.io/badge/Open%20Source-Yes-darkgreen?style=flat-square">
@@ -17,7 +17,7 @@ MeshStudio is a software created entirely with the Python and with Ursina Engine
 
 This software has several external features and plugins created by the community
 
-## Features
+# Features
 
 <h2>General UI</h2>
 
@@ -43,7 +43,7 @@ This software has several external features and plugins created by the community
 
 
 
-**Keybinds**:
+## Keybinds:
 
   **shift + a**: Add an object
 
@@ -54,6 +54,8 @@ This software has several external features and plugins created by the community
   **shift + s**: Save project
   
   **shift + o**: Open project
+
+  **ctrl + right click**: Open Panel
 
   **left arrow / right arrow**: rotate object in the Y axis
 
@@ -89,4 +91,4 @@ This software has several external features and plugins created by the community
 ## Examples
 
 
-*Version BETA-1.4.0.0*
+*Version BETA-1.4.5.0*
