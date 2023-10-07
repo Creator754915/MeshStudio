@@ -9,6 +9,7 @@ from ursina.prefabs.file_browser_save import FileBrowserSave
 from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
+from assets.plugins.ClickPanel import ClickPanel
 
 from sun import Sun
 
@@ -21,6 +22,7 @@ window.exit_button.enabled = False
 window.fps_counter.enabled = False
 
 editor_camera = EditorCamera()
+sky = Sky(texture="sky_default")
 
 project_name = 'Scene1'
 name = 'Entity1'
@@ -165,7 +167,7 @@ def add():
                 Button(text='Close', color=color.red, on_click=hide_cm)
             ),
         )
-        cm.y = wp.panel.scale_y / 2 * wp.scale_y
+        cm.y = cm.panel.scale_y / 2 * cm.scale_y
 
     wp = WindowPanel(
         title='Model',
@@ -208,33 +210,40 @@ def rename_object():
     wp.y = wp.panel.scale_y / 2 * wp.scale_y
 
 
-def remove_btn():
+def remove_btn(*args):
+    def all_cube():
+        for cube in cube_nmb:
+            destroy(cube)
     if cube_nmb:
         cube = cube_nmb.pop()
         destroy(cube)
 
+    if args == 'all_cube':
+        all_cube()
+
 
 def set_texture():
-    def hide_wp():
-        destroy(wp)
+    def hide_tw():
+        destroy(tw)
 
     def textures():
-        for cube1 in cube_nmb:
-            cube1.texture = texture_name.text
+        if cube_nmb:
+            cube = cube_nmb[:-1]
+            cube.texture = texture_name.text
 
     texture_name = InputField(text='new_texture')
 
-    wp = WindowPanel(
+    tw = WindowPanel(
         title='Texture',
         content=(
             Text('Texture Path:'),
             texture_name,
             Button(text='Submit', color=color.azure, on_click=textures),
-            Button(text='Close', color=color.red, on_click=hide_wp)
+            Button(text='Close', color=color.red, on_click=hide_tw)
         ),
     )
 
-    wp.y = wp.panel.scale_y / 2 * wp.scale_y
+    tw.y = tw.panel.scale_y / 2 * tw.scale_y
 
 
 def open_sound_editor():
@@ -343,11 +352,12 @@ def open_project():
 
                 print(data['project']['camera']['position']['x'])
                 print(data['project']['models'])
-            except:
+            except json.decoder.JSONDecodeError:
                 print_warning("Your project is corrupt !")
                 print_on_screen("Your project is corrupt !", scale=2, position=(-0.3, 0))
 
     fb.on_submit = on_submit
+
 
 def save_project():
     wp = FileBrowserSave(file_type='.msstd', z=-5)
@@ -387,7 +397,7 @@ def general_mode():
 def texture_edit():
     def hide_pe():
         destroy(exit_button)
-        pe.visible, pe.enabled = False
+        pe.visible, pe.enabled = False, False
 
         empty_texture.save("new_texture.png")
 
@@ -477,9 +487,15 @@ def preferences():
     def hide_wpr():
         destroy(wpr)
 
-    fov_slider = Slider(0, 180)
+    def apply():
+        try:
+            sky.texture = sky_input.text
+        except ResourceWarning:
+            print_warning("ImportFailed: The texture are missing !")
+
     project_input = InputField()
     plugin_input = InputField()
+    sky_input = InputField()
 
     wpr = WindowPanel(
         title='Preferences',
@@ -488,9 +504,9 @@ def preferences():
             project_input,
             Text('Import Plugin'),
             plugin_input,
-            Text('Camera FOV'),
-            fov_slider,
-            Button(text='Save', color=color.azure),
+            Text('Sky Texture Path'),
+            sky_input,
+            Button(text='Save', color=color.azure, on_click=apply()),
             Button(text='Close', color=color.red, on_click=hide_wpr)
         ),
     )
@@ -565,9 +581,9 @@ shaders = DropdownMenu('Shaders', buttons=(
     DropdownMenuButton('No Light', on_click=shaders_desactive),
     DropdownMenuButton('With Light', on_click=shaders_active)
 ))
-render_ui.x = -0.659
-edit.x = -0.43
-shaders.x = -0.201
+render_ui.x = window.top_left.x + .23
+edit.x = window.top_left.x + .459
+shaders.x = window.top_left.x + .688
 
 footer = Entity(parent=camera.ui, scale=(1.95, 0.3), model=Quad(aspect=3, radius=0), color=color.black33, y=-0.4)
 left = Entity(parent=camera.ui, scale=(0.3, 0.9), model=Quad(aspect=3, radius=0), color=color.black50, x=0.75, y=0.2)
@@ -587,7 +603,7 @@ Text(
 )
 
 # Footer
-floor = Entity(model=Grid(50, 50), rotation=(90, 0, 0), scale=(50, 50))
+floor = Entity(model=Grid(100, 100), rotation=(90, 0, 0), scale=(50, 50))
 axis_x = Entity(model='cube', scale=(0.05, 0.05, 50), color=color.red, rotation=(0, 0, 0))
 axis_y = Entity(model='cube', scale=(0.05, 0.05, 50), color=color.green, rotation=(0, 90, 0))
 axis_z = Entity(model='cube', scale=(0.05, 20, 0.05), color=color.blue, rotation=(0, 90, 0), y=10)
@@ -596,9 +612,9 @@ Button(parent=footer, text="Add", scale=(0.1, 0.2), radius=0, x=-0.4, y=0.25, on
 Button(parent=footer, text="Rename", scale=(0.1, 0.2), radius=0, x=-0.4, y=0, on_click=rename_object)
 Button(parent=footer, text="Remove", scale=(0.1, 0.2), radius=0, x=-0.4, y=-0.25, on_click=remove_btn)
 
-button_x = Button(parent=footer, text=f"X: 0.0", scale=(0.1, 0.2), radius=0, x=-0.25, y=0.25).alpha = 0
-button_y = Button(parent=footer, text=f"Y: 0.0", scale=(0.1, 0.2), radius=0, x=-0.25, y=0).alpha = 0
-button_z = Button(parent=footer, text=f"Z: 0.0", scale=(0.1, 0.2), radius=0, x=-0.25, y=-0.25).alpha = 0
+button_x = Button(parent=footer, text=f"Select All", scale=(0.1, 0.2), radius=0, x=-0.27, y=0.25, on_click=Func(remove_btn, 'all_cube'))
+button_y = Button(parent=footer, text=f"Y: 0.0", scale=(0.1, 0.2), radius=0, x=-0.27, y=0)
+button_z = Button(parent=footer, text=f"Z: 0.0", scale=(0.1, 0.2), radius=0, x=-0.27, y=-0.25)
 
 Button(parent=footer, text="X", scale=(0.1, 0.2), radius=0, x=-0.15, y=0.25, on_click=set_x)
 Button(parent=footer, text="Y", scale=(0.1, 0.2), radius=0, x=-0.15, y=0, on_click=set_y)
@@ -607,7 +623,7 @@ Button(parent=footer, text="Z", scale=(0.1, 0.2), radius=0, x=-0.15, y=-0.25, on
 slider = Slider(1, 359, text='Timeline', default=0, height=Text.size * 2, width=Text.size * 8, y=-.4, step=1,
                 vertical=False)
 
-Button(parent=footer, texture="icons/icon_keyframes.png", scale=(.1, .5), radius=0,  x=0.32)
+Button(model='cube', parent=footer, texture="icons/icon_keyframes.png", scale=(.03, 0.2), x=0.3)
 
 # Left
 
@@ -654,6 +670,9 @@ def input(key):
     if held_keys['control'] and key == 'scroll up':
         pe.brush_size += 1
         print(pe.brush_size)
+
+    if held_keys['control'] and held_keys['right mouse']:
+        ClickPanel()
 
     if not pe.brush_size <= 1:
         if held_keys['control'] and key == 'scroll down':
@@ -703,10 +722,6 @@ rot_z = Entity(model=Circle(14, mode='line', thickness=8), scale=(1.5, 1.5, 1.5)
                rotation=(90, 0, 0),
                visible=False)
 
-from assets.plugins.ClickPanel import ClickPanel
-
-ClickPanel()
-
 
 def update():
     global lock_xyz, rot
@@ -750,6 +765,9 @@ def update():
                 rot_y.visible = False
                 rot_z.visible = False
                 rot = False
+
+    if editor_camera.z < -622800000:
+        editor_camera.z = -600000000
 
     project_text.text = f'Project Name: {project_name}'
     camera_text.text = f'Camera Position: {round(camera.x)}, {round(camera.y)}, {round(camera.z)}'
