@@ -55,17 +55,10 @@ def add():
                           color=rgb(r, g, b), texture='white_cube',
                           lock=(0, 0, 0))
         # cube1.plane_direction = (1, 0, 0)
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0),
-               z=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
 
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0),
-               x=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
-
-        Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0),
-               y=1)
-        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
 
         cube_nmb.append(cube1)
         destroy(wp)
@@ -74,20 +67,15 @@ def add():
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='sphere', name=f'Sphere{len(cube_nmb)}', postion=(0, 0, 0),
+        cube1 = Draggable(parent=scene, model='sphere', collider="mesh", name=f'Sphere{len(cube_nmb)}',
+                          postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='white_cube',
                           lock=(0, 0, 0))
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0),
-               z=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
 
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0),
-               x=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
 
-        Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0),
-               y=1)
-        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
         cube_nmb.append(cube1)
         destroy(wp)
 
@@ -98,17 +86,11 @@ def add():
         cube1 = Draggable(parent=scene, model='plane', name=f'Plane{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='white_cube',
                           lock=(0, 0, 0))
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0),
-               z=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
 
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0),
-               x=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
 
-        Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0),
-               y=1)
-        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
         cube_nmb.append(cube1)
         destroy(wp)
 
@@ -119,14 +101,9 @@ def add():
         cube1 = Draggable(parent=scene, model='cube', name=f'Quad{len(cube_nmb)}', postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='white_cube',
                           lock=(0, 0, 0))
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.red, rotation=(0, 0, 0), z=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.red, scale=(0.3, 0.3, 0.3), rotation=(-90, 0, 0), z=-1.5)
-
-        Button(parent=cube1, model='cube', scale=(0.08, 0.08, 1), color=color.green, rotation=(0, 90, 0), x=-1)
-        Entity(parent=cube1, model=Cone(6), color=color.green, scale=(0.3, 0.3, 0.3), rotation=(0, 0, -90), x=-1.5)
-
-        Button(parent=cube1, model='cube', scale=(0.08, 1, 0.08), color=color.blue, rotation=(0, 90, 0), y=1)
-        Entity(parent=cube1, model=Cone(6), color=color.blue, scale=(0.3, 0.3, 0.3), y=1.5)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
+        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
 
         cube_nmb.append(cube1)
         destroy(wp)
@@ -136,18 +113,23 @@ def add():
             destroy(cm)
 
         def create_mesh():
-            verts = input1.text
-            tris = input2.text
-            uvs = input3.text
-            norms = input4 * len(verts)
-            colors = (color.red, color.blue, color.lime, color.black)
-            e = Entity(model=Mesh(vertices=verts, triangles=tris, uvs=uvs, normals=norms, colors=colors), scale=2)
+            try:
+                verts = input1.text
+                tris = input2.text
+                uvs = input3.text
+                norms = input4 * len(verts)
+
+                # verts = ((0, 0, 0), (1, 0, 0), (.5, 1, 0), (-.5, 1, 0))
+                # tris = (1, 2, 0, 2, 3, 0)
+                # uvs = ((1.0, 0.0), (0.0, 1.0), (0.0, 0.0), (1.0, 1.0))
+                # norms = ((0, 0, -1),) * len(verts)
+
+                colors = (color.red, color.blue, color.lime, color.black)
+                e = Entity(model=Mesh(vertices=verts, triangles=tris, uvs=uvs, normals=norms, colors=colors), scale=2)
+            except:
+                print_warning("Error: Failed to create the Mesh")
 
         destroy(wp)
-        # verts = ((0, 0, 0), (1, 0, 0), (.5, 1, 0), (-.5, 1, 0))
-        # tris = (1, 2, 0, 2, 3, 0)
-        # uvs = ((1.0, 0.0), (0.0, 1.0), (0.0, 0.0), (1.0, 1.0))
-        # norms = ((0, 0, -1),) * len(verts)
 
         input1 = InputField(character_limit=50)
         input2 = InputField(character_limit=40)
