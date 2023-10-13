@@ -15,7 +15,8 @@ class ModelNode(Draggable):
             position=position,
             scale=scale,
             color=color,
-            highlight_color=color)
+            highlight_color=color,
+            texture="white_cube")
 
         self.texture_attachment = Button(model='circle', position=(-.5, 0, -.01), scale=.07, parent=self)
 
@@ -58,6 +59,9 @@ class ColorNode(Draggable):
     def change(self):
         self.value_text.text = (self.slider_r.value, self.slider_g.value, self.slider_b.value)
 
+    def undo(self):
+        destroy(self, delay=0)
+
 
 class DirectionalLightNode(Draggable):
     def __init__(self, text='Directional Light', position=(0, 0), scale=.3, color=color.black66):
@@ -82,7 +86,7 @@ class DirectionalLightNode(Draggable):
 
 
 class CameraNode(Draggable):
-    def __init__(self, text='Camera Type', position=(0, 0), scale=.3, color=color.black66, **kwargs):
+    def __init__(self, text='Camera Type Name', position=(0, 0), scale=.3, color=color.black66, **kwargs):
         super().__init__(
             text=text,
             text_origin=(0, .4),
@@ -92,7 +96,7 @@ class CameraNode(Draggable):
             highlight_color=color)
 
         self.camera = Entity(position=(-.03, .15, -.01), parent=self)
-        self.cameraText = Text(text='Camera Type Name', position=(-.43, .04, -.01), scale=3.25, parent=self)
+        # self.cameraText = Text(text='Camera Type Name', position=(-.43, .04, -.01), scale=3.25, parent=self)
         self.cameraName = InputField(default_value='camera name', limit_content_to='_./abcdefghijklmnopqrstuvwxyz',
                                      character_limit=13, position=(0, .2, -.01), scale=(.9, .15), parent=self)
 
@@ -117,7 +121,11 @@ def createNode(node):
 
 
 def convert():
-    print(nodes)
+    try:
+        print(nodes)
+        print(scene.entity)
+    except (AttributeError):
+        print_warning("Try angain !")
 
 
 DropdownMenu(text='File', buttons=(
@@ -141,6 +149,7 @@ addMenu = DropdownMenu(text='Add', buttons=(
     DropdownMenuButton(text='Model', on_click=Func(createNode, ModelNode)),
     DropdownMenuButton(text='Light', on_click=Func(createNode, DirectionalLightNode)),
     DropdownMenuButton(text='Color', on_click=Func(createNode, ColorNode)),
+    DropdownMenuButton(text='Camera', on_click=Func(createNode, CameraNode)),
 ))
 
 addMenu.x = window.top_left.x + .25
@@ -153,9 +162,24 @@ def run():
         nodes[i].make()
 
 
+def input(key):
+    if held_keys['control'] and key == "e":
+        camera.ui.enable()
+        grid.visible = True
+        for i in range(len(nodes)):
+            nodes[i].undo()
+
+    if held_keys['control'] and key == "x":
+        if nodes:
+            cube = nodes[:-1]
+
+            print_on_screen(text=f"{cube} was deleted !", position=(-.1, 0), scale=2)
+
+
 grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 10))
 
 runButton = Button(model='circle', icon='run', position=window.top_right + (-.025, -.025), scale=.03,
                    on_click=run)
+
 
 app.run()
