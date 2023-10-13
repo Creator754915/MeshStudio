@@ -397,11 +397,16 @@ def texture_edit():
         footer.visible = True
         slider.visible = True
         left.visible = True
+        texture_scale.visible = True
 
     destroy(wp)
     empty_texture = Texture(Image.new(mode='RGBA',
                                       size=(32, 32),
                                       color=(255, 255, 255, 255)))
+
+    texture_scale = TextField(parent=camera.ui, ignore_paused=True, origin=(.5, .5), y=-0.5, x=-0.614,
+                              z=-1)
+
     pe.enabled = True
     pe.visible = True
     pe.texture = empty_texture
@@ -413,6 +418,7 @@ def texture_edit():
     footer.visible = False
     slider.visible = False
     left.visible = False
+    texture_scale.visible = False
 
     exit_button = Button(parent=camera.ui, ignore_paused=True, origin=(.5, .5), y=0.5, x=0.614,
                          z=-1, scale=(.05, .025), color=color.red.tint(-.2), text='x',
