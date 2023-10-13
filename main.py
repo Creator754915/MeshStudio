@@ -715,7 +715,8 @@ rot_z = Entity(model=Circle(14, mode='line', thickness=8), scale=(1.5, 1.5, 1.5)
                rotation=(90, 0, 0),
                visible=False)
 
-ClickPanel(key_control=True, key_bind="right mouse")
+ClickPanel(key_control=True, key_bind="right mouse", button_text="Add", button2_text="Remove", button3_text="Rename",
+           button4_text="Copy", button5_text="Paste", button6_text="Exit")
 
 
 def update():
@@ -762,7 +763,7 @@ def update():
                 rot = False
 
     if editor_camera.z < -622800000:
-        editor_camera.z = -600000000
+        editor_camera.z = -500000000
 
     project_text.text = f'Project Name: {project_name}'
     camera_text.text = f'Camera Position: {round(camera.x)}, {round(camera.y)}, {round(camera.z)}'
