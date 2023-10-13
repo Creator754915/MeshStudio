@@ -108,17 +108,16 @@ class CameraNode(Draggable):
         destroy(self, delay=0)
 
 
-ModelNode().x = -0.4
-ColorNode().x = 0
-DirectionalLightNode().x = 0.4
-CameraNode().x = 0.8
-
 nodes = []
 
 
 def createNode(node):
     newNode = node()
     nodes.append(newNode)
+
+
+def convert():
+    print(nodes)
 
 
 DropdownMenu(text='File', buttons=(
@@ -133,6 +132,7 @@ DropdownMenu(text='File', buttons=(
         DropdownMenuButton(text='Option a'),
         DropdownMenuButton(text='Option b'),
     )),
+    DropdownMenuButton(text='Convert', color=color.rgb(0, 100, 0), on_click=convert),
     DropdownMenuButton(text='Exit', color=color.rgb(75, 0, 0), on_click=application.quit),
 ))
 
