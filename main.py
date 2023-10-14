@@ -47,63 +47,19 @@ def add():
     def hide_wp():
         destroy(wp)
 
-    def cube():
+    def entity_cube(model_t):
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='cube', name=f'Cube{len(cube_nmb)}', postion=(0, 0, 0),
+        cube1 = Draggable(parent=scene, model=model_t, name=f'Cube{len(cube_nmb)}', collider="box",
+                          postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='white_cube',
                           lock=(0, 0, 0))
         # cube1.plane_direction = (1, 0, 0)
 
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
-
-        cube_nmb.append(cube1)
-        destroy(wp)
-
-    def sphere():
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='sphere', collider="mesh", name=f'Sphere{len(cube_nmb)}',
-                          postion=(0, 0, 0),
-                          color=rgb(r, g, b), texture='white_cube',
-                          lock=(0, 0, 0))
-
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
-
-        cube_nmb.append(cube1)
-        destroy(wp)
-
-    def plane():
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='plane', name=f'Plane{len(cube_nmb)}', postion=(0, 0, 0),
-                          color=rgb(r, g, b), texture='white_cube',
-                          lock=(0, 0, 0))
-
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
-
-        cube_nmb.append(cube1)
-        destroy(wp)
-
-    def quad():
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model='cube', name=f'Quad{len(cube_nmb)}', postion=(0, 0, 0),
-                          color=rgb(r, g, b), texture='white_cube',
-                          lock=(0, 0, 0))
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-1.1)
-        Button(parent=cube1, model='arrow', collider="mesh", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=1.1)
+        Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-0.5)
+        Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-0.5)
+        Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=0.5)
 
         cube_nmb.append(cube1)
         destroy(wp)
@@ -157,10 +113,10 @@ def add():
         title='Model',
         content=(
             Text('Model Type:'),
-            Button(text='Cube', color=color.azure, on_click=cube),
-            Button(text='Sphere', color=color.azure, on_click=sphere),
-            Button(text='Plane', color=color.azure, on_click=plane),
-            Button(text='Quad', color=color.azure, on_click=quad),
+            Button(text='Cube', color=color.azure, on_click=Func(entity_cube, "cube")),
+            Button(text='Sphere', color=color.azure, on_click=Func(entity_cube, "sphere")),
+            Button(text='Plane', color=color.azure, on_click=Func(entity_cube, "plane")),
+            Button(text='Quad', color=color.azure, on_click=Func(entity_cube, "quad")),
             Button(text='Mesh', color=color.azure, on_click=mesh),
             Button(text='Close', color=color.red, on_click=hide_wp)
         ),
@@ -194,7 +150,7 @@ def rename_object():
     wp.y = wp.panel.scale_y / 2 * wp.scale_y
 
 
-def remove_btn(*args):
+def remove_cube(*args):
     def all_cube():
         for cube in cube_nmb:
             destroy(cube)
@@ -598,17 +554,20 @@ Text(
 )
 
 # Footer
-floor = Entity(model=Grid(100, 100), rotation=(90, 0, 0), scale=(50, 50))
-axis_x = Entity(model='cube', scale=(0.05, 0.05, 50), color=color.red, rotation=(0, 0, 0))
-axis_y = Entity(model='cube', scale=(0.05, 0.05, 50), color=color.green, rotation=(0, 90, 0))
-axis_z = Entity(model='cube', scale=(0.05, 20, 0.05), color=color.blue, rotation=(0, 90, 0), y=10)
+floor = Entity(model=Grid(1000, 1000), rotation_x=90, scale=1000, color=rgb(220, 220, 220))
+axis_y = Entity(model=Mesh(vertices=[Vec3(0, 1000, 0), Vec3(0, -1000, 0)], mode='line', thickness=8),
+                color=rgb(220, 0, 0))
+axis_x = Entity(model=Mesh(vertices=[Vec3(1000, 0, 0), Vec3(-1000, 0, 0)], mode='line', thickness=8),
+                color=rgb(0, 220, 0))
+axis_z = Entity(model=Mesh(vertices=[Vec3(0, 0, 1000), Vec3(0, 0, -1000)], mode='line', thickness=8),
+                color=rgb(0, 0, 220))
 
 Button(parent=footer, text="Add", scale=(0.1, 0.2), radius=0, x=-0.4, y=0.25, on_click=add)
 Button(parent=footer, text="Rename", scale=(0.1, 0.2), radius=0, x=-0.4, y=0, on_click=rename_object)
-Button(parent=footer, text="Remove", scale=(0.1, 0.2), radius=0, x=-0.4, y=-0.25, on_click=remove_btn)
+Button(parent=footer, text="Remove", scale=(0.1, 0.2), radius=0, x=-0.4, y=-0.25, on_click=remove_cube)
 
 button_x = Button(parent=footer, text=f"Select All", scale=(0.1, 0.2), radius=0, x=-0.27, y=0.25,
-                  on_click=Func(remove_btn, 'all_cube'))
+                  on_click=Func(remove_cube, 'all_cube'))
 button_y = Button(parent=footer, text=f"Y: 0.0", scale=(0.1, 0.2), radius=0, x=-0.27, y=0)
 button_z = Button(parent=footer, text=f"Z: 0.0", scale=(0.1, 0.2), radius=0, x=-0.27, y=-0.25)
 
@@ -644,7 +603,6 @@ runnig = False
 
 def input(key):
     global lock_xyz
-    print(key)
     # if key == '0':
     #     lock_xyz = (0, 0, 0)
     # if key == '1':
@@ -662,6 +620,8 @@ def input(key):
         save_project()
     if held_keys['control'] and key == "o":
         open_project()
+    if held_keys['control'] and key == "x":
+        remove_cube()
 
     if held_keys['control'] and key == 'scroll up':
         pe.brush_size += 1
