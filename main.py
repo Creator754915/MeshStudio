@@ -23,7 +23,7 @@ window.fps_counter.enabled = False
 
 editor_camera = EditorCamera()
 sky = Sky(texture="sky_default")
-cameraEntity = Entity(model="camera.obj", scale=0.5, wireframe=True, rotation=(0, 0, 40), position=(-8, 5, 0))
+cameraEntity = Entity(model="camera.obj", scale=0.5, rotation=(0, 0, 40), position=(-8, 5, 0))
 
 project_name = 'Scene1'
 name = 'Entity1'
@@ -44,8 +44,8 @@ def hide_w():
 
 
 def add():
-    def hide_wp():
-        destroy(wp)
+    def hide_wpo():
+        destroy(wpo)
 
     def entity_cube(model_t):
         r = random.randint(0, 255)
@@ -62,9 +62,9 @@ def add():
         Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=0.5)
 
         cube_nmb.append(cube1)
-        destroy(wp)
+        destroy(wpo)
 
-    def mesh():
+    def mesh_create():
         def hide_cm():
             destroy(cm)
 
@@ -81,11 +81,11 @@ def add():
                 # norms = ((0, 0, -1),) * len(verts)
 
                 colors = (color.red, color.blue, color.lime, color.black)
-                e = Entity(model=Mesh(vertices=verts, triangles=tris, uvs=uvs, normals=norms, colors=colors), scale=2)
-            except:
+                Entity(model=Mesh(vertices=verts, triangles=tris, uvs=uvs, normals=norms, colors=colors), scale=2)
+            except (IndexError, ValueError, AttributeError):
                 print_warning("Error: Failed to create the Mesh")
 
-        destroy(wp)
+        destroy(wpo)
 
         input1 = InputField(character_limit=50)
         input2 = InputField(character_limit=40)
@@ -109,7 +109,7 @@ def add():
         )
         cm.y = cm.panel.scale_y / 2 * cm.scale_y
 
-    wp = WindowPanel(
+    wpo = WindowPanel(
         title='Model',
         content=(
             Text('Model Type:'),
@@ -117,19 +117,19 @@ def add():
             Button(text='Sphere', color=color.azure, on_click=Func(entity_cube, "sphere")),
             Button(text='Plane', color=color.azure, on_click=Func(entity_cube, "plane")),
             Button(text='Quad', color=color.azure, on_click=Func(entity_cube, "quad")),
-            Button(text='Mesh', color=color.azure, on_click=mesh),
-            Button(text='Close', color=color.red, on_click=hide_wp)
+            Button(text='Mesh', color=color.azure, on_click=mesh_create),
+            Button(text='Close', color=color.red, on_click=hide_wpo)
         ),
     )
 
-    wp.y = wp.panel.scale_y / 2 * wp.scale_y
+    wpo.y = wpo.panel.scale_y / 2 * wpo.scale_y
 
     print(len(cube_nmb))
 
 
 def rename_object():
-    def hide_wp():
-        destroy(wp)
+    def hide_wpr():
+        destroy(wpr)
 
     object_name = InputField(text='Object1')
 
@@ -137,23 +137,23 @@ def rename_object():
         for cube in cube_nmb:
             cube.name = object_name.text
 
-    wp = WindowPanel(
+    wpr = WindowPanel(
         title='Object Name',
         content=(
             Text('New Object Name:'),
             object_name,
             Button(text='Submit', color=color.azure, on_click=chg_name),
-            Button(text='Close', color=color.red, on_click=hide_wp)
+            Button(text='Close', color=color.red, on_click=hide_wpr)
         ),
     )
 
-    wp.y = wp.panel.scale_y / 2 * wp.scale_y
+    wpr.y = wpr.panel.scale_y / 2 * wpr.scale_y
 
 
 def remove_cube(*args):
     def all_cube():
-        for cube in cube_nmb:
-            destroy(cube)
+        for cube1 in cube_nmb:
+            destroy(cube1)
 
     if cube_nmb:
         cube = cube_nmb.pop()
@@ -248,8 +248,8 @@ def open_model_gltf():
 
 
 def rename_project():
-    def hide_wp():
-        destroy(wp)
+    def hide_wpr():
+        destroy(wpr)
 
     def rename_w():
         global project_name
@@ -261,16 +261,16 @@ def rename_project():
 
     name_input = InputField(name='name_field')
 
-    wp = WindowPanel(
+    wpr = WindowPanel(
         title='Rename Project',
         content=(
             Text('Name:'),
             name_input,
             Button(text='Submit', color=color.azure, on_click=rename_w),
-            Button(text='Close', color=color.red, on_click=hide_wp)
+            Button(text='Close', color=color.red, on_click=hide_wpr)
         ),
     )
-    wp.y = wp.panel.scale_y / 2 * wp.scale_y
+    wpr.y = wpr.panel.scale_y / 2 * wpr.scale_y
 
 
 def open_project():
@@ -305,7 +305,7 @@ def open_project():
 
 
 def save_project():
-    wp = FileBrowserSave(file_type='.msstd', z=-5)
+    wps = FileBrowserSave(file_type='.msstd', z=-5)
 
     import json
     save_data = {
@@ -326,7 +326,7 @@ def save_project():
             "models": f'{cube_nmb}'
         }
     }
-    wp.data = json.dumps(save_data)
+    wps.data = json.dumps(save_data)
 
 
 def general_mode():
