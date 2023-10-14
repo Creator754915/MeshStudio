@@ -51,8 +51,7 @@ def add():
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
-        cube1 = Draggable(parent=scene, model=model_t, name=f'Cube{len(cube_nmb)}', collider="box",
-                          postion=(0, 0, 0),
+        cube1 = Draggable(parent=scene, model=model_t, name=f'Cube{len(cube_nmb)}', collider="box", postion=(0, 0, 0),
                           color=rgb(r, g, b), texture='white_cube',
                           lock=(0, 0, 0))
         # cube1.plane_direction = (1, 0, 0)
@@ -381,6 +380,14 @@ def texture_edit():
                          on_click=hide_pe, name='exit_button')
 
 
+def convert_code():
+    with open('_convert_file.txt', 'w') as convert:
+        clean_cube_nmb = str(cube_nmb).strip('[]') + '\n'
+        convert.write(clean_cube_nmb)
+
+    convert.close()
+
+
 def edit_mode():
     def show_vert():
         axis_x.visible = False
@@ -519,22 +526,27 @@ file = DropdownMenu('File', buttons=(
     DropdownMenuButton('Timeline Options', on_click=timeline_options),
     DropdownMenuButton('Exit', color=color.rgb(75, 0, 0), on_click=application.quit),
 ))
+edit_ui = DropdownMenu('Edit', buttons=(
+    DropdownMenuButton('Convert into code', on_click=convert_code),
+    DropdownMenuButton('---', on_click=render_video)
+))
 render_ui = DropdownMenu('Render', buttons=(
     DropdownMenuButton('Render Image', on_click=render_image),
     DropdownMenuButton('Render Video', on_click=render_video)
 ))
-edit = DropdownMenu('Edit', buttons=(
+mode_ui = DropdownMenu('Mode', buttons=(
     DropdownMenuButton('Object Mode', on_click=general_mode),
     DropdownMenuButton('Edit Mode', on_click=edit_mode),
     DropdownMenuButton('Edit Texture', on_click=texture_edit)
 ))
-shaders = DropdownMenu('Shaders', buttons=(
+shaders_ui = DropdownMenu('Shaders', buttons=(
     DropdownMenuButton('No Light', on_click=shaders_desactive),
     DropdownMenuButton('With Light', on_click=shaders_active)
 ))
-render_ui.x = window.top_left.x + .23
-edit.x = window.top_left.x + .459
-shaders.x = window.top_left.x + .688
+edit_ui.x = window.top_left.x + .23
+render_ui.x = window.top_left.x + .459
+mode_ui.x = window.top_left.x + .688
+shaders_ui.x = window.top_left.x + .918
 
 footer = Entity(parent=camera.ui, scale=(1.95, 0.3), model=Quad(aspect=3, radius=0), color=color.black33, y=-0.4)
 left = Entity(parent=camera.ui, scale=(0.3, 0.9), model=Quad(aspect=3, radius=0), color=color.black50, x=0.75, y=0.2)
@@ -555,12 +567,15 @@ Text(
 
 # Footer
 floor = Entity(model=Grid(1000, 1000), rotation_x=90, scale=1000, color=rgb(220, 220, 220))
-axis_y = Entity(model=Mesh(vertices=[Vec3(0, 1000, 0), Vec3(0, -1000, 0)], mode='line', thickness=8),
-                color=rgb(220, 0, 0))
-axis_x = Entity(model=Mesh(vertices=[Vec3(1000, 0, 0), Vec3(-1000, 0, 0)], mode='line', thickness=8),
-                color=rgb(0, 220, 0))
-axis_z = Entity(model=Mesh(vertices=[Vec3(0, 0, 1000), Vec3(0, 0, -1000)], mode='line', thickness=8),
-                color=rgb(0, 0, 220))
+axis_x = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.red, rotation=(0, 0, 0))
+axis_y = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.green, rotation=(0, 90, 0))
+axis_z = Entity(model='cube', scale=(0.03, 100, 0.03), color=color.blue, rotation=(0, 90, 0))
+# axis_y = Entity(model=Mesh(vertices=[Vec3(0, 1000, 0), Vec3(0, -1000, 0)], mode='line', thickness=8),
+#                 color=rgb(220, 0, 0))
+# axis_x = Entity(model=Mesh(vertices=[Vec3(1000, 0, 0), Vec3(-1000, 0, 0)], mode='line', thickness=8),
+#                 color=rgb(0, 220, 0))
+# axis_z = Entity(model=Mesh(vertices=[Vec3(0, 0, 1000), Vec3(0, 0, -1000)], mode='line', thickness=8),
+#                 color=rgb(0, 0, 220))
 
 Button(parent=footer, text="Add", scale=(0.1, 0.2), radius=0, x=-0.4, y=0.25, on_click=add)
 Button(parent=footer, text="Rename", scale=(0.1, 0.2), radius=0, x=-0.4, y=0, on_click=rename_object)
