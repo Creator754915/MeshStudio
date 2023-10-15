@@ -126,6 +126,22 @@ def add():
     print(len(cube_nmb))
 
 
+def custom_entity(model_arg):
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    cube1 = Draggable(parent=scene, model=model_arg, name=f'Cube{len(cube_nmb)}', collider="box", postion=(0, 0, 0),
+                      color=rgb(r, g, b), texture='white_cube',
+                      lock=(0, 0, 0))
+    # cube1.plane_direction = (1, 0, 0)
+
+    Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-0.5)
+    Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-0.5)
+    Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=0.5)
+
+    cube_nmb.append(cube1)
+
+
 def rename_object():
     def hide_wpr():
         destroy(wpr)
@@ -527,8 +543,20 @@ file = DropdownMenu('File', buttons=(
     DropdownMenuButton('Exit', color=color.rgb(75, 0, 0), on_click=application.quit),
 ))
 edit_ui = DropdownMenu('Edit', buttons=(
-    DropdownMenuButton('Convert into code', on_click=convert_code),
-    DropdownMenuButton('---', on_click=render_video)
+    DropdownMenu('Add', buttons=(
+        DropdownMenuButton('Cube', on_click=Func(custom_entity, "cube")),
+        DropdownMenuButton('Sphere', on_click=Func(custom_entity, "sphere")),
+        DropdownMenuButton('Plane', on_click=Func(custom_entity, "plane")),
+        DropdownMenuButton('Quad', on_click=Func(custom_entity, "quad")),
+        DropdownMenuButton('Circle', on_click=Func(custom_entity, "circle")),
+        DropdownMenuButton('Mesh', on_click=Func(custom_entity, "cube")),
+    )),
+    DropdownMenu('Quick Build', buttons=(
+        DropdownMenuButton('Diamond', on_click=Func(custom_entity, "diamond")),
+        DropdownMenuButton('Icosphere', on_click=Func(custom_entity, "icosphere")),
+        DropdownMenuButton('Arrow', on_click=Func(custom_entity, "arrow")),
+    )),
+    DropdownMenuButton('Convert into code', on_click=convert_code)
 ))
 render_ui = DropdownMenu('Render', buttons=(
     DropdownMenuButton('Render Image', on_click=render_image),
@@ -566,7 +594,7 @@ Text(
 )
 
 # Footer
-floor = Entity(model=Grid(1000, 1000), rotation_x=90, scale=1000, color=rgb(220, 220, 220))
+floor = Entity(model=Grid(250, 250), rotation_x=90, scale=500, color=rgb(220, 220, 220))
 axis_x = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.red, rotation=(0, 0, 0))
 axis_y = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.green, rotation=(0, 90, 0))
 axis_z = Entity(model='cube', scale=(0.03, 100, 0.03), color=color.blue, rotation=(0, 90, 0))
