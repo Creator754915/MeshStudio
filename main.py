@@ -23,7 +23,6 @@ window.fps_counter.enabled = False
 
 editor_camera = EditorCamera()
 sky = Sky(texture="sky_default")
-cameraEntity = Entity(model="camera.obj", scale=0.5, rotation=(0, 0, 40), position=(-8, 5, 0))
 
 project_name = 'Scene1'
 name = 'Entity1'
@@ -178,6 +177,11 @@ def remove_cube(*args):
         all_cube()
 
 
+def change_color():
+    if cube_nmb:
+        cube_nmb[-1].color = color.random_color()
+
+
 def set_texture():
     def hide_tw():
         destroy(tw)
@@ -229,6 +233,10 @@ def render_image():
 
     editor_camera.world_position = (cameraEntity.x, cameraEntity.y, 0)
     editor_camera.rotation = (cameraEntity.rotation_z, 90, 0)
+
+    print(editor_camera.position)
+    print(editor_camera.rotation)
+    print(editor_camera.scale)
 
 
 def render_video():
@@ -609,10 +617,11 @@ Button(parent=footer, text="Add", scale=(0.1, 0.2), radius=0, x=-0.4, y=0.25, on
 Button(parent=footer, text="Rename", scale=(0.1, 0.2), radius=0, x=-0.4, y=0, on_click=rename_object)
 Button(parent=footer, text="Remove", scale=(0.1, 0.2), radius=0, x=-0.4, y=-0.25, on_click=remove_cube)
 
-button_x = Button(parent=footer, text=f"Select All", scale=(0.1, 0.2), radius=0, x=-0.27, y=0.25,
-                  on_click=Func(remove_cube, 'all_cube'))
+button_x = Button(parent=footer, text=f"Change color", scale=(0.1, 0.2), radius=0, x=-0.27, y=0.25,
+                  on_click=change_color)
 button_y = Button(parent=footer, text=f"Y: 0.0", scale=(0.1, 0.2), radius=0, x=-0.27, y=0)
-button_z = Button(parent=footer, text=f"Z: 0.0", scale=(0.1, 0.2), radius=0, x=-0.27, y=-0.25)
+button_z = Button(parent=footer, text=f"Delete All", scale=(0.1, 0.2), radius=0, x=-0.27, y=-0.25,
+                  on_click=Func(remove_cube, 'all_cube'))
 
 Button(parent=footer, text="X", scale=(0.1, 0.2), radius=0, x=-0.15, y=0.25, on_click=set_x)
 Button(parent=footer, text="Y", scale=(0.1, 0.2), radius=0, x=-0.15, y=0, on_click=set_y)
@@ -641,7 +650,9 @@ cube_scale = Text(parent=left, text=f'Object Scale: 0, 0, 0', scale=(2.5, 1), x=
 cube_texture = Text(parent=left, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.125, z=-1)
 
 origin = Entity(model='quad', color=color.orange, scale=(.05, .05))
-runnig = False
+
+cameraEntity = Draggable(parent=scene, model="camera.obj", collider="box", scale=0.5, rotation=(0, 0, 45),
+                         position=(-8, 5, 0), color=color.black50)
 
 
 def input(key):
@@ -746,6 +757,13 @@ def update():
             # )
             # cube.tooltip = tooltip_test
 
+    if mouse.hovered_entity == cameraEntity:
+        cube_text.text = f'Object Name: {cameraEntity.name}'
+        cube_position.text = f'Object Position: {round(cameraEntity.x, 2)}, {round(cameraEntity.y, 2)}, {round(cameraEntity.z, 2)}'
+        cube_rotation.text = f'Object Rotation: {round(cameraEntity.rotation_x, 2)}, {round(cameraEntity.rotation_y, 2)}, {round(cameraEntity.rotation_z, 2)} '
+        cube_scale.text = f'Object Scale: {round(cameraEntity.scale_x, 2)}, {round(cameraEntity.scale_y, 2)}, {round(cameraEntity.scale_z, 2)}'
+        cube_texture.text = f'Object Texture: {cameraEntity.texture}'
+
     if held_keys['s']:
         for cube in cube_nmb:
             if mouse.hovered_entity == cube:
@@ -767,6 +785,15 @@ def update():
 
     if editor_camera.z < -622800000:
         editor_camera.z = -500000000
+
+    if cameraEntity.x > 0 and cameraEntity.y > 0:
+        cameraEntity.rotation = (0, 180, 40)
+    elif cameraEntity.x < 0 and cameraEntity.y > 0:
+        cameraEntity.rotation = (0, 0, 40)
+    elif cameraEntity.y < 0 and cameraEntity.x < 0:
+        cameraEntity.rotation = (0, 0, -40)
+    elif cameraEntity.y > 0 and cameraEntity.x < 0:
+        cameraEntity.rotation = (0, 180, -40)
 
     project_text.text = f'Project Name: {project_name}'
     camera_text.text = f'Camera Position: {round(camera.x)}, {round(camera.y)}, {round(camera.z)}'
