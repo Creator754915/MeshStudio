@@ -1,7 +1,4 @@
-from time import sleep
-
 from ursina import *
-from ursina.shaders.screenspace_shaders.pixelation_shader import pixelation_shader
 
 
 class TextureUI(ButtonList):
@@ -38,18 +35,18 @@ class TextureUI(ButtonList):
         self.cube = Entity(model="cube", scale=(1, 1, 1), x=-4, y=1)
         self.sphere = Entity(model="sphere", scale=(1, 1, 1), x=-4, y=-1)
 
-        Entity(model="quad", scale=(999, 999), color=color.black66, z=999)
+        self.bg = Entity(model="quad", scale=(999, 999), color=color.black66, z=999)
 
     def test(self, txt_arg: str):
         self.cube.texture = txt_arg
         self.sphere.texture = txt_arg
 
-    def on_mouse_enter(self):
-        self.cube.rotation_y += 1
-        self.cube.rotation_x += 1
-
-        self.sphere.rotation_y += 1
-        self.sphere.rotation_x += 1
+    def input(self, key):
+        if key == "escape":
+            destroy(self)
+            destroy(self.cube)
+            destroy(self.sphere)
+            destroy(self.bg)
 
 
 # def test(txt_arg: str):
