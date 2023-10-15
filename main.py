@@ -9,6 +9,8 @@ from ursina.prefabs.file_browser_save import FileBrowserSave
 from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
+
+from TexturesUI import TextureUI
 from assets.plugins.ClickPanel import ClickPanel
 
 from sun import Sun
@@ -404,6 +406,11 @@ def texture_edit():
                          on_click=hide_pe, name='exit_button')
 
 
+def open_texture():
+    bd = {}
+    TextureUI(bd)
+
+
 def convert_code():
     with open('_convert_file.txt', 'w') as convert:
         clean_cube_nmb = str(cube_nmb).strip('[]') + '\n'
@@ -564,6 +571,7 @@ edit_ui = DropdownMenu('Edit', buttons=(
         DropdownMenuButton('Icosphere', on_click=Func(custom_entity, "icosphere")),
         DropdownMenuButton('Arrow', on_click=Func(custom_entity, "arrow")),
     )),
+    DropdownMenuButton('Textures Folder', on_click=open_texture),
     DropdownMenuButton('Convert into code', on_click=convert_code)
 ))
 render_ui = DropdownMenu('Render', buttons=(
