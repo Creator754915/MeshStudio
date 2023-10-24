@@ -30,6 +30,7 @@ project_name = 'Scene1'
 name = 'Entity1'
 cube_nmb = []
 lock_xyz = (0, 0, 0)
+save = False
 
 timeline_speed = 1
 
@@ -44,11 +45,33 @@ def hide_w():
     destroy(wp)
 
 
+def new_project():
+    def hide_wwp():
+        destroy(wwp)
+
+    def clear_all():
+        scene.clear(cube_nmb)
+
+    if save is False:
+        wwp = WindowPanel(
+            title='WARNING',
+            content=(
+                Text('Are you sure to unsave your project ?'),
+                Button(text='Yes', color=color.azure, on_click=clear_all),
+                Button(text='Close', color=color.red, on_click=hide_wwp)
+            ),
+        )
+        wwp.y = wwp.panel.scale_y / 2 * wwp.scale_y
+    else:
+        clear_all()
+
+
 def add():
     def hide_wpo():
         destroy(wpo)
 
     def entity_cube(model_t):
+        global save
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
@@ -61,6 +84,8 @@ def add():
         Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-0.5)
         Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=0.5)
 
+        save = False
+
         cube_nmb.append(cube1)
         destroy(wpo)
 
@@ -69,6 +94,7 @@ def add():
             destroy(cm)
 
         def create_mesh():
+            global save
             try:
                 verts = input1.text
                 tris = input2.text
@@ -82,6 +108,7 @@ def add():
 
                 colors = (color.red, color.blue, color.lime, color.black)
                 Entity(model=Mesh(vertices=verts, triangles=tris, uvs=uvs, normals=norms, colors=colors), scale=2)
+                save = False
             except (IndexError, ValueError, AttributeError):
                 print_warning("Error: Failed to create the Mesh")
 
@@ -545,7 +572,7 @@ wp = WindowPanel(
 wp.y = 0.3
 
 file = DropdownMenu('File', buttons=(
-    DropdownMenuButton('New'),
+    DropdownMenuButton('New', on_click=new_project),
     DropdownMenuButton('Open', on_click=open_project),
     DropdownMenuButton('Rename Project', on_click=rename_project),
     DropdownMenuButton('Save', color=color.rgb(0, 100, 0), on_click=save_project),
@@ -659,12 +686,12 @@ cube_texture = Text(parent=left, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1)
 
 origin = Entity(model='quad', color=color.orange, scale=(.05, .05))
 
-cameraEntity = Draggable(parent=scene, model="camera.obj", collider="box", scale=0.5, rotation=(0, 0, 45),
+cameraEntity = Draggable(parent=scene, model="camera.obj", collider="mesh", scale=0.5, rotation=(0, 0, 45),
                          position=(-8, 5, 0), color=color.black50)
 
 
 def input(key):
-    global lock_xyz
+    global lock_xyz, save
     # if key == '0':
     #     lock_xyz = (0, 0, 0)
     # if key == '1':
@@ -680,6 +707,7 @@ def input(key):
         set_texture()
     if held_keys['control'] and key == "s":
         save_project()
+        save = True
     if held_keys['control'] and key == "o":
         open_project()
     if held_keys['control'] and key == "x":
