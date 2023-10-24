@@ -1,6 +1,7 @@
 from ursina import *
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
 from ursina.prefabs.checkbox import CheckBox
+from ursina.prefabs.file_browser_save import FileBrowserSave
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader
 
@@ -120,22 +121,34 @@ def createNode(node):
     nodes.append(newNode)
 
 
+def save_project():
+    wp = FileBrowserSave(file_type='.json', z=-5)
+
+    import json
+    save_data = {
+        "nodes": {
+            "node1": {
+                "model": nodes
+            }
+        }
+    }
+
+    print(nodes)
+    wp.data = json.dumps(save_data)
+
+
 def convert():
     try:
         print(nodes)
         print(scene.entity)
-    except (AttributeError):
+    except (AttributeError, AssertionError, TypeError):
         print_warning("Try angain !")
 
 
 DropdownMenu(text='File', buttons=(
     DropdownMenuButton(text='New'),
     DropdownMenuButton(text='Open'),
-    DropdownMenu(text='Open Recent', buttons=(
-        DropdownMenuButton(text='Project 1'),
-        DropdownMenuButton(text='Project 2'),
-    )),
-    DropdownMenuButton(text='Save'),
+    DropdownMenuButton(text='Save', on_click=save_project),
     DropdownMenu(text='Options', buttons=(
         DropdownMenuButton(text='Option a'),
         DropdownMenuButton(text='Option b'),
@@ -164,22 +177,28 @@ def run():
 
 def input(key):
     if held_keys['control'] and key == "e":
-        camera.ui.enable()
-        grid.visible = True
-        for i in range(len(nodes)):
-            nodes[i].undo()
+        try:
+            camera.ui.enable()
+            grid.visible = True
+            for i in range(len(nodes)):
+                nodes[i].undo()
+        except AttributeError:
+            print_on_screen(text=f"Please use a CAMERA !", position=(-.1, 0), scale=2)
 
-    if held_keys['control'] and key == "x":
-        if nodes:
-            cube = nodes[:-1]
+    if held_keys['control'] and key == "w":
+        try:
+            if nodes:
+                cube = nodes.pop()
+                destroy(cube)
 
-            print_on_screen(text=f"{cube} was deleted !", position=(-.1, 0), scale=2)
+                print_on_screen(text=f"{cube} was deleted !", position=(-.1, 0), scale=2)
+        except AssertionError:
+            print_on_screen(text="Try Again !", position=(-.1, 0), scale=2)
 
 
 grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 10))
 
 runButton = Button(model='circle', icon='run', position=window.top_right + (-.025, -.025), scale=.03,
                    on_click=run)
-
 
 app.run()
