@@ -10,6 +10,7 @@ from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
 
+from Physics.RigidBody import *
 from TexturesUI import TextureUI
 from assets.plugins.ClickPanel import ClickPanel
 
@@ -168,6 +169,67 @@ def custom_entity(model_arg):
     Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=0.5)
 
     cube_nmb.append(cube1)
+
+
+def custom_effect(effect_name):
+    if effect_name == 'rigidbody':
+        debugNode = BulletDebugNode('Debug')
+        debugNode.showWireframe(False)
+        debugNode.showConstraints(True)
+        debugNode.showBoundingBoxes(False)
+        debugNode.showNormals(False)
+        debugNP = render.attachNewNode(debugNode)
+        debugNP.show()
+
+        world = BulletWorld()
+        world.setGravity(Vec3(0, -9.81, 0))
+        world.setDebugNode(debugNP.node())
+
+        def hide_wpf():
+            destroy(wpf)
+
+        def create_object(object_name):
+            if object_name == "capsule":
+                r = random.randint(0, 255)
+                g = random.randint(0, 255)
+                b = random.randint(0, 255)
+
+                rgb_capsule = Entity(model=object_name, texture="brick", color=rgb(r, g, b), x=10, scale=(1, 1, 1))
+                Rigidbody(world=world, shape=CapsuleShape(), entity=rgb_capsule, mass=5, friction=.7)
+
+                cube_nmb.append(rgb_capsule)
+            elif object_name == "box":
+                r = random.randint(0, 255)
+                g = random.randint(0, 255)
+                b = random.randint(0, 255)
+
+                rgb_box = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=10, scale=(1, 1, 1))
+                Rigidbody(world=world, shape=BoxShape(), entity=rgb_box, mass=5, friction=.7)
+
+                cube_nmb.append(rgb_box)
+
+            elif object_name == "sphere":
+                r = random.randint(0, 255)
+                g = random.randint(0, 255)
+                b = random.randint(0, 255)
+
+                rgb_sphere = Entity(model=object_name, texture="brick", color=rgb(r, g, b), x=10, scale=(1, 1, 1))
+                Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
+
+                cube_nmb.append(rgb_sphere)
+
+        wpf = WindowPanel(
+            title='RigidBody Type',
+            content=(
+                Text('Object Type:'),
+                Button(text='Box', color=color.azure, on_click=Func(create_object, "box")),
+                Button(text='Capsule', color=color.azure, on_click=Func(create_object, "capsule")),
+                Button(text='Sphere', color=color.azure, on_click=Func(create_object, "sphere")),
+                Button(text='Close', color=color.red, on_click=hide_wpf)
+            ),
+        )
+
+        wpf.y = wpf.panel.scale_y / 2 * wpf.scale_y
 
 
 def rename_object():
@@ -463,7 +525,7 @@ def edit_mode():
     show_vert()
 
 
-plane = Entity(name="plane_shaders", model='plane', scale=20, color=color.gray, shader=lit_with_shadows_shader,
+plane = Entity(name="plane_shaders", model='plane', scale=50, color=color.gray, shader=lit_with_shadows_shader,
                visible=False)
 
 
@@ -505,13 +567,16 @@ def preferences():
 
     def apply():
         try:
-            sky.texture = sky_input.text
-        except ResourceWarning:
-            print_warning("ImportFailed: The texture are missing !")
+            if sky_input.value == 1:
+                sky.texture = 'sky_sunset'
+            else:
+                sky.texture = 'sky_default'
+        except Exception as e:
+            print_warning(f"Error: {e}")
 
     project_input = InputField()
     plugin_input = InputField()
-    sky_input = InputField()
+    sky_input = Slider(0, 1, step=1)
 
     wpr = WindowPanel(
         title='Preferences',
@@ -540,8 +605,10 @@ def timeline_options():
 
         hide_wpt()
 
-    step_slider = Slider(.5, 3, step=0.2)
+    step_slider = Slider(.4, 2, step=0.2)
     speed_slider = Slider(0.5, 5, step=0.5)
+
+    destroy(wp)
 
     wpt = WindowPanel(
         title='Timeline Options',
@@ -598,6 +665,11 @@ edit_ui = DropdownMenu('Edit', buttons=(
         DropdownMenuButton('Icosphere', on_click=Func(custom_entity, "icosphere")),
         DropdownMenuButton('Arrow', on_click=Func(custom_entity, "arrow")),
     )),
+    DropdownMenu('Quick Effects', buttons=(
+        DropdownMenuButton('RigidBody', on_click=Func(custom_effect, "rigidbody")),
+        DropdownMenuButton('///'),
+        DropdownMenuButton('///'),
+    )),
     DropdownMenuButton('Textures Folder', on_click=open_texture),
     DropdownMenuButton('Convert into code', on_click=convert_code)
 ))
@@ -606,9 +678,9 @@ render_ui = DropdownMenu('Render', buttons=(
     DropdownMenuButton('Render Video', on_click=render_video)
 ))
 mode_ui = DropdownMenu('Mode', buttons=(
-    DropdownMenuButton('Object Mode', on_click=general_mode),
-    DropdownMenuButton('Edit Mode', on_click=edit_mode),
-    DropdownMenuButton('Edit Texture', on_click=texture_edit)
+    DropdownMenuButton('Object Mode', on_click=general_mode, radius=0),
+    DropdownMenuButton('Edit Mode', on_click=edit_mode, radius=0),
+    DropdownMenuButton('Edit Texture', on_click=texture_edit, radius=0),
 ))
 shaders_ui = DropdownMenu('Shaders', buttons=(
     DropdownMenuButton('No Light', on_click=shaders_desactive),
