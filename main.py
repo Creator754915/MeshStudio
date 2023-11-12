@@ -276,7 +276,19 @@ def custom_effect(effect_name):
             g = random.randint(0, 255)
             b = random.randint(0, 255)
 
-            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=h+1, scale=(1, 1, 1))
+            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=h+2, scale=(1, 1, 1))
+            Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
+
+            Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
+
+            physic_nmb.append(rgb_sphere)
+            
+        for h in range(1, 3):
+            r = random.randint(0, 255)
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
+
+            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=h+1, y=5, scale=(1, 1, 1))
             Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
 
             Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
