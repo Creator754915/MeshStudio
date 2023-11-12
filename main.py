@@ -202,8 +202,8 @@ def custom_effect(effect_name):
                 g = random.randint(0, 255)
                 b = random.randint(0, 255)
 
-                rgb_capsule = Entity(model=object_name, texture="brick", color=rgb(r, g, b), x=10, scale=(1, 1, 1))
-                Rigidbody(world=world, shape=CapsuleShape(), entity=rgb_capsule, mass=5, friction=.7)
+                rgb_capsule = Entity(model='sphere', texture='brick', color=rgb(r, g, b), y=8, scale=(1, 2, 1))
+                Rigidbody(world=world, shape=CapsuleShape(height=2, radius=1), entity=rgb_capsule, mass=3)
 
                 cube_nmb.append(rgb_capsule)
                 hide_wpf()
@@ -213,7 +213,7 @@ def custom_effect(effect_name):
                 g = random.randint(0, 255)
                 b = random.randint(0, 255)
 
-                rgb_box = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=10, scale=(1, 1, 1))
+                rgb_box = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
                 Rigidbody(world=world, shape=BoxShape(), entity=rgb_box, mass=5, friction=.7)
 
                 cube_nmb.append(rgb_box)
@@ -224,7 +224,7 @@ def custom_effect(effect_name):
                 g = random.randint(0, 255)
                 b = random.randint(0, 255)
 
-                rgb_sphere = Entity(model=object_name, texture="brick", color=rgb(r, g, b), x=10, scale=(1, 1, 1))
+                rgb_sphere = Entity(model=object_name, texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
                 Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
 
                 cube_nmb.append(rgb_sphere)
@@ -235,8 +235,8 @@ def custom_effect(effect_name):
             content=(
                 Text('Object Type:'),
                 Button(text='Box', color=color.azure, on_click=Func(create_object, "box")),
-                Button(text='Capsule', color=color.azure, on_click=Func(create_object, "capsule")),
                 Button(text='Sphere', color=color.azure, on_click=Func(create_object, "sphere")),
+                Button(text='Capsule', color=color.azure, on_click=Func(create_object, "capsule")),
                 Button(text='Close', color=color.red, on_click=hide_wpf)
             ),
         )
