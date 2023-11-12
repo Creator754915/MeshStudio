@@ -10,7 +10,7 @@ from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
 
-from Physics.RigidBody import *
+from RigidBody import *
 from TexturesUI import TextureUI
 from assets.plugins.ClickPanel import ClickPanel
 
@@ -34,6 +34,20 @@ lock_xyz = (0, 0, 0)
 save = False
 
 timeline_speed = 1
+
+debugNode = BulletDebugNode('Debug')
+debugNode.showWireframe(False)
+debugNode.showConstraints(True)
+debugNode.showBoundingBoxes(False)
+debugNode.showNormals(False)
+debugNP = render.attachNewNode(debugNode)
+debugNP.show()
+
+world = BulletWorld()
+world.setGravity(Vec3(0, -9.81, 0))
+world.setDebugNode(debugNP.node())
+
+physic = False
 
 empty_texture = Texture(Image.new(mode='RGBA',
                                   size=(32, 32),
@@ -172,18 +186,12 @@ def custom_entity(model_arg):
 
 
 def custom_effect(effect_name):
+    global physic
     if effect_name == 'rigidbody':
-        debugNode = BulletDebugNode('Debug')
-        debugNode.showWireframe(False)
-        debugNode.showConstraints(True)
-        debugNode.showBoundingBoxes(False)
-        debugNode.showNormals(False)
-        debugNP = render.attachNewNode(debugNode)
-        debugNP.show()
+        physic = True
 
-        world = BulletWorld()
-        world.setGravity(Vec3(0, -9.81, 0))
-        world.setDebugNode(debugNP.node())
+        ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box")
+        gr = Rigidbody(world=world, shape=BoxShape(size=(30, .05, 30)), entity=ground)
 
         def hide_wpf():
             destroy(wpf)
@@ -198,6 +206,8 @@ def custom_effect(effect_name):
                 Rigidbody(world=world, shape=CapsuleShape(), entity=rgb_capsule, mass=5, friction=.7)
 
                 cube_nmb.append(rgb_capsule)
+                hide_wpf()
+
             elif object_name == "box":
                 r = random.randint(0, 255)
                 g = random.randint(0, 255)
@@ -207,6 +217,7 @@ def custom_effect(effect_name):
                 Rigidbody(world=world, shape=BoxShape(), entity=rgb_box, mass=5, friction=.7)
 
                 cube_nmb.append(rgb_box)
+                hide_wpf()
 
             elif object_name == "sphere":
                 r = random.randint(0, 255)
@@ -217,6 +228,7 @@ def custom_effect(effect_name):
                 Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
 
                 cube_nmb.append(rgb_sphere)
+                hide_wpf()
 
         wpf = WindowPanel(
             title='RigidBody Type',
@@ -842,7 +854,10 @@ ClickPanel(key_control=True, key_bind="right mouse", button_text="Add", button2_
 
 
 def update():
-    global lock_xyz, rot
+    global lock_xyz, rot, physic, rgb_sphere
+
+    if physic is True:
+        world.doPhysics(time.dt)
 
     for cube in cube_nmb:
         # cube1.lock = lock_xyz
