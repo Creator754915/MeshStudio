@@ -99,6 +99,8 @@ def add():
                           lock=(0, 0, 0))
         # cube1.plane_direction = (1, 0, 0)
 
+        Entity(parent=cube1, model='quad', color=color.orange, scale=(.05, .05))
+
         Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.red, rotation=(0, 90, 0), z=-0.5)
         Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.green, rotation=(0, 180, 0), x=-0.5)
         Button(parent=cube1, model='arrow', collider="box", scale=1.2, color=color.blue, rotation=(0, 0, -90), y=0.5)
@@ -208,6 +210,8 @@ def custom_effect(effect_name):
                 rgb_capsule = Entity(model='sphere', texture='brick', color=rgb(r, g, b), y=8, scale=(1, 2, 1))
                 Rigidbody(world=world, shape=CapsuleShape(height=2, radius=1), entity=rgb_capsule, mass=3)
 
+                Entity(parent=rgb_capsule, model='quad', color=color.orange, scale=(.05, .05))
+
                 physic_nmb.append(rgb_capsule)
                 hide_wpf()
 
@@ -219,6 +223,8 @@ def custom_effect(effect_name):
                 rgb_box = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
                 Rigidbody(world=world, shape=BoxShape(), entity=rgb_box, mass=5, friction=.7)
 
+                Entity(parent=rgb_box, model='quad', color=color.orange, scale=(.05, .05))
+
                 physic_nmb.append(rgb_box)
                 hide_wpf()
 
@@ -229,6 +235,8 @@ def custom_effect(effect_name):
 
                 rgb_sphere = Entity(model=object_name, texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
                 Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
+
+                Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
 
                 physic_nmb.append(rgb_sphere)
                 hide_wpf()
@@ -664,6 +672,7 @@ wp = WindowPanel(
         Button(text='Close', color=color.red, on_click=hide_w)
     ),
 )
+
 wp.y = 0.3
 
 file = DropdownMenu('File', buttons=(
@@ -715,6 +724,7 @@ shaders_ui = DropdownMenu('Shaders', buttons=(
     DropdownMenuButton('No Light', on_click=shaders_desactive),
     DropdownMenuButton('With Light', on_click=shaders_active)
 ))
+
 edit_ui.x = window.top_left.x + .23
 render_ui.x = window.top_left.x + .459
 mode_ui.x = window.top_left.x + .688
@@ -742,6 +752,7 @@ floor = Entity(model=Grid(250, 250), rotation_x=90, scale=500, color=rgb(220, 22
 axis_x = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.red, rotation=(0, 0, 0))
 axis_y = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.green, rotation=(0, 90, 0))
 axis_z = Entity(model='cube', scale=(0.03, 100, 0.03), color=color.blue, rotation=(0, 90, 0))
+
 # axis_y = Entity(model=Mesh(vertices=[Vec3(0, 1000, 0), Vec3(0, -1000, 0)], mode='line', thickness=8),
 #                 color=rgb(220, 0, 0))
 # axis_x = Entity(model=Mesh(vertices=[Vec3(1000, 0, 0), Vec3(-1000, 0, 0)], mode='line', thickness=8),
@@ -806,9 +817,12 @@ def input(key):
         add()
     if held_keys['shift'] and key == "t":
         set_texture()
+    if held_keys['shift'] and key == "p":
+        custom_effect("box")
     if held_keys['control'] and key == "s":
         save_project()
         save = True
+
     if held_keys['control'] and key == "o":
         open_project()
     if held_keys['control'] and key == "x":
@@ -871,7 +885,7 @@ ClickPanel(key_control=True, key_bind="right mouse", button_text="Add", button2_
 
 
 def update():
-    global lock_xyz, rot, physic, rgb_sphere
+    global lock_xyz, rot, physic
 
     if physic is True:
         world.doPhysics(time.dt)
@@ -897,6 +911,15 @@ def update():
             # )
             # cube.tooltip = tooltip_test
 
+    for cube_physics in physic_nmb:
+        if mouse.hovered_entity == cube_physics:
+            print(cube_physics.name)
+            cube_text.text = f'Object Name: {cube_physics.name}'
+            cube_position.text = f'Object Position: {round(cube_physics.x, 2)}, {round(cube_physics.y, 2)}, {round(cube_physics.z, 2)}'
+            cube_rotation.text = f'Object Rotation: {round(cube_physics.rotation_x, 2)}, {round(cube_physics.rotation_y, 2)}, {round(cube_physics.rotation_z, 2)} '
+            cube_scale.text = f'Object Scale: {round(cube_physics.scale_x, 2)}, {round(cube_physics.scale_y, 2)}, {round(cube_physics.scale_z, 2)}'
+            cube_texture.text = f'Object Texture: {cube_physics.texture}'
+
     if mouse.hovered_entity == cameraEntity:
         cube_text.text = f'Object Name: {cameraEntity.name}'
         cube_position.text = f'Object Position: {round(cameraEntity.x, 2)}, {round(cameraEntity.y, 2)}, {round(cameraEntity.z, 2)}'
@@ -908,6 +931,9 @@ def update():
         for cube in cube_nmb:
             if mouse.hovered_entity == cube:
                 cube.scale = (mouse.x * 50, mouse.y * 10, mouse.x * 10)
+        for cube_physics in physic_nmb:
+            if mouse.hovered_entity == cube_physics:
+                cube_physics.scale = (mouse.x * 50, mouse.y * 10, mouse.x * 10)
 
     if held_keys['r']:
         for cube in cube_nmb:
