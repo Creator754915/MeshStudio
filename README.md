@@ -1,7 +1,7 @@
 <p align="center">
   <img src="meshstudio_logo.png">
   <br>
-  <img src="https://img.shields.io/badge/Version-1.4.5.0-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Version-1.5.0.0-green?style=for-the-badge">
   <br>
   <img src="https://img.shields.io/badge/Author-Creator754915-blue?style=flat-square">
   <img src="https://img.shields.io/badge/Open%20Source-Yes-darkgreen?style=flat-square">
@@ -71,6 +71,10 @@ This software has several external features and plugins created by the community
 
 ## Updates
 
+### Patch 2.0.0
+**New features**:
+  1. RigidBody add
+
 ### Patch 1.1.0
 
 **New features**:
@@ -95,4 +99,4 @@ This software has several external features and plugins created by the community
 ## Examples
 
 
-*Version BETA-1.4.5.0*
+*Version BETA-1.5.0.0*
