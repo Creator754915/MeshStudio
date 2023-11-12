@@ -30,6 +30,7 @@ sky = Sky(texture="sky_default")
 project_name = 'Scene1'
 name = 'Entity1'
 cube_nmb = []
+physic_nmb = []
 lock_xyz = (0, 0, 0)
 save = False
 
@@ -48,6 +49,9 @@ world.setGravity(Vec3(0, -9.81, 0))
 world.setDebugNode(debugNP.node())
 
 physic = False
+
+ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box", visbile=False)
+gr = Rigidbody(world=world, shape=BoxShape(size=(30, .05, 30)), entity=ground)
 
 empty_texture = Texture(Image.new(mode='RGBA',
                                   size=(32, 32),
@@ -190,8 +194,7 @@ def custom_effect(effect_name):
     if effect_name == 'rigidbody':
         physic = True
 
-        ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box")
-        gr = Rigidbody(world=world, shape=BoxShape(size=(30, .05, 30)), entity=ground)
+        ground.visible = True
 
         def hide_wpf():
             destroy(wpf)
@@ -205,7 +208,7 @@ def custom_effect(effect_name):
                 rgb_capsule = Entity(model='sphere', texture='brick', color=rgb(r, g, b), y=8, scale=(1, 2, 1))
                 Rigidbody(world=world, shape=CapsuleShape(height=2, radius=1), entity=rgb_capsule, mass=3)
 
-                cube_nmb.append(rgb_capsule)
+                physic_nmb.append(rgb_capsule)
                 hide_wpf()
 
             elif object_name == "box":
@@ -216,7 +219,7 @@ def custom_effect(effect_name):
                 rgb_box = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
                 Rigidbody(world=world, shape=BoxShape(), entity=rgb_box, mass=5, friction=.7)
 
-                cube_nmb.append(rgb_box)
+                physic_nmb.append(rgb_box)
                 hide_wpf()
 
             elif object_name == "sphere":
@@ -227,7 +230,7 @@ def custom_effect(effect_name):
                 rgb_sphere = Entity(model=object_name, texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
                 Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
 
-                cube_nmb.append(rgb_sphere)
+                physic_nmb.append(rgb_sphere)
                 hide_wpf()
 
         wpf = WindowPanel(
@@ -537,6 +540,19 @@ def edit_mode():
     show_vert()
 
 
+def physic_mode():
+    global physic
+
+    if physic is False:
+        physic = True
+        ground.visible = True
+    elif physic is True:
+        physic = False
+        ground.visible = False
+        destroy(physic_nmb)
+        physic_nmb.clear()
+
+
 plane = Entity(name="plane_shaders", model='plane', scale=50, color=color.gray, shader=lit_with_shadows_shader,
                visible=False)
 
@@ -692,6 +708,7 @@ render_ui = DropdownMenu('Render', buttons=(
 mode_ui = DropdownMenu('Mode', buttons=(
     DropdownMenuButton('Object Mode', on_click=general_mode, radius=0),
     DropdownMenuButton('Edit Mode', on_click=edit_mode, radius=0),
+    DropdownMenuButton('Physics Mode', on_click=physic_mode, radius=0),
     DropdownMenuButton('Edit Texture', on_click=texture_edit, radius=0),
 ))
 shaders_ui = DropdownMenu('Shaders', buttons=(
