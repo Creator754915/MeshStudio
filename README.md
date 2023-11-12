@@ -31,6 +31,10 @@ This software has several external features and plugins created by the community
 
 <img src="Features/lights.png">
 
+<h2>Physics</h2>
+
+<img src="Features/physics.png">
+
 <h2>Modelisation</h2>
 
 ![model](https://github.com/Creator754915/MeshStudio/assets/106489587/47d05ec8-ba7e-45b2-ae47-f624e8691627)
