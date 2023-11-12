@@ -254,6 +254,35 @@ def custom_effect(effect_name):
 
         wpf.y = wpf.panel.scale_y / 2 * wpf.scale_y
 
+    elif effect_name == 'wall':
+        physic = True
+
+        ground.visible = True
+
+        for l in range(3):
+            r = random.randint(0, 255)
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
+
+            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=l+1, y=1, scale=(1, 1, 1))
+            Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
+
+            Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
+
+            physic_nmb.append(rgb_sphere)
+
+        for h in range(3):
+            r = random.randint(0, 255)
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
+
+            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=h+1, scale=(1, 1, 1))
+            Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
+
+            Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
+
+            physic_nmb.append(rgb_sphere)
+
 
 def rename_object():
     def hide_wpr():
@@ -294,6 +323,7 @@ def remove_cube(*args):
 def change_color():
     if cube_nmb:
         cube_nmb[-1].color = color.random_color()
+        print_on_screen("Enitity have been remove !")
 
 
 def set_texture():
@@ -704,7 +734,7 @@ edit_ui = DropdownMenu('Edit', buttons=(
     )),
     DropdownMenu('Quick Effects', buttons=(
         DropdownMenuButton('RigidBody', on_click=Func(custom_effect, "rigidbody")),
-        DropdownMenuButton('///'),
+        DropdownMenuButton('Physics Wall', on_click=Func(custom_effect, "wall")),
         DropdownMenuButton('///'),
     )),
     DropdownMenuButton('Textures Folder', on_click=open_texture),
