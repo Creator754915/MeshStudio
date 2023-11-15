@@ -45,9 +45,9 @@ class ColorNode(Draggable):
 
         self.output_attachment = Button(model='circle', position=(.5, -.2, -.01), scale=.07, parent=self)
 
-        self.slider_r = Slider(0, 255, position=(-0.49, .2, -.01), scale=(1.94, 1.95), step=1, parent=self)
-        self.slider_g = Slider(0, 255, position=(-0.49, .1, -.01), scale=(1.94, 1.95), step=1, parent=self)
-        self.slider_b = Slider(0, 255, position=(-0.49, 0, -.01), scale=(1.94, 1.95), step=1, parent=self)
+        self.slider_r = Slider(0, 255, position=(-0.49, .2, -.01), scale=(1.94, 1.96), step=1, parent=self)
+        self.slider_g = Slider(0, 255, position=(-0.49, .1, -.01), scale=(1.94, 1.96), step=1, parent=self)
+        self.slider_b = Slider(0, 255, position=(-0.49, 0, -.01), scale=(1.93, 2), step=1, parent=self)
 
         self.value_text = Text(position=(-0.25, -.1, -.01), scale=3.25, parent=self)
 
@@ -107,7 +107,8 @@ class CameraNode(Draggable):
         elif self.cameraName.text == "firstperson":
             FirstPersonController()
         else:
-            EditorCamera()
+            camera.position = (0, 0, 0)
+            camera.rotation = (0, 0, 0)
 
     def undo(self):
         destroy(self, delay=0)
@@ -141,8 +142,8 @@ def convert():
     try:
         print(nodes)
         print(scene.entity)
-    except (AttributeError, AssertionError, TypeError):
-        print_warning("Try angain !")
+    except Exception as e:
+        print_warning(f"Error: {e}")
 
 
 DropdownMenu(text='File', buttons=(
@@ -194,6 +195,14 @@ def input(key):
                 print_on_screen(text=f"{cube} was deleted !", position=(-.1, 0), scale=2)
         except AssertionError:
             print_on_screen(text="Try Again !", position=(-.1, 0), scale=2)
+
+    if held_keys['control'] and key == 'scroll up':
+        for node in nodes:
+            node.scale = node.scale * 1.2
+
+    if held_keys['control'] and key == 'scroll down':
+        for node in nodes:
+            node.scale = node.scale / 1.2
 
 
 grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 10))
