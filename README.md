@@ -102,5 +102,15 @@ This software has several external features and plugins created by the community
 
 ## Examples
 
+## The All Contributors Table
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a><img src="https://avatars.githubusercontent.com/u/121798131?v=4" width="100px;" alt="IndividualCoder"/><br /><sub><b>IndividualCoder</b></sub></a><br /><a href="https://github.com/IndividualCoder" title="Developper">💻</a> <a href="#talk-kentcdodds" title="Talks">📢</a></td>
+    </tr>
+  </tbody>
+</table>
+
 
 *Version BETA-1.5.0.0*
