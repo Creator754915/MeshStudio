@@ -10,7 +10,7 @@ from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
 
-from RigidBody import *
+from Physics.RigidBody import *
 from TexturesUI import TextureUI
 from assets.plugins.ClickPanel import ClickPanel
 
