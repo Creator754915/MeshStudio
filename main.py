@@ -50,7 +50,8 @@ world.setDebugNode(debugNP.node())
 
 physic = False
 
-ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box", visbile=False)
+ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box")
+ground.visbile = False
 gr = Rigidbody(world=world, shape=BoxShape(size=(30, .05, 30)), entity=ground)
 
 empty_texture = Texture(Image.new(mode='RGBA',
@@ -282,7 +283,7 @@ def custom_effect(effect_name):
             Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
 
             physic_nmb.append(rgb_sphere)
-            
+
         for h in range(1, 3):
             r = random.randint(0, 255)
             g = random.randint(0, 255)
@@ -515,7 +516,7 @@ def general_mode():
     floor.visible = True
     footer.visible = True
     slider.visible = True
-    left.visible = True
+    right.visible = True
 
 
 def texture_edit():
@@ -531,7 +532,7 @@ def texture_edit():
         floor.visible = True
         footer.visible = True
         slider.visible = True
-        left.visible = True
+        right.visible = True
         texture_scale.visible = True
 
     destroy(wp)
@@ -552,7 +553,7 @@ def texture_edit():
     floor.visible = False
     footer.visible = False
     slider.visible = False
-    left.visible = False
+    right.visible = False
     texture_scale.visible = False
 
     exit_button = Button(parent=camera.ui, ignore_paused=True, origin=(.5, .5), y=0.5, x=0.614,
@@ -581,7 +582,7 @@ def edit_mode():
         floor.visible = False
         footer.visible = False
         slider.visible = False
-        left.visible = False
+        right.visible = False
 
         m = load_model("assets/models/cube.obj", use_deepcopy=True)
         for t in m.vertices:
@@ -615,7 +616,7 @@ def shaders_active():
     floor.visible = False
     footer.visible = False
     slider.visible = False
-    left.visible = False
+    right.visible = False
 
     EditorCamera()
 
@@ -632,7 +633,7 @@ def shaders_desactive():
     floor.visible = True
     footer.visible = True
     slider.visible = True
-    left.visible = True
+    right.visible = True
 
     plane.visible = False
 
@@ -773,7 +774,8 @@ mode_ui.x = window.top_left.x + .688
 shaders_ui.x = window.top_left.x + .918
 
 footer = Entity(parent=camera.ui, scale=(1.95, 0.3), model=Quad(aspect=3, radius=0), color=color.black33, y=-0.4)
-left = Entity(parent=camera.ui, scale=(0.3, 0.9), model=Quad(aspect=3, radius=0), color=color.black50, x=0.75, y=0.2)
+right = Entity(parent=camera.ui, scale=(0.3, 0.9), model=Quad(aspect=3, radius=0), color=color.black50,
+               position=(0.75, 0.2))
 
 # Help Keybind
 
@@ -821,22 +823,22 @@ slider = Slider(1, 359, text='Timeline', default=0, height=Text.size * 2, width=
 
 Button(model='cube', parent=footer, texture="icons/icon_keyframes.png", scale=(.03, 0.2), x=0.3)
 
-# Left
+# Right
 
-Text(parent=left, text='Project Info', scale=(3, 1.5), x=-0.22, y=0.33, z=-1)
+Text(parent=right, text='Project Info', scale=(3, 1.5), x=-0.22, y=0.33, z=-1)
 
-project_text = Text(parent=left, text=f'Project Name: {project_name}', scale=(2.5, 1), x=-0.5, y=0.23, z=-1)
+project_text = Text(parent=right, text=f'Project Name: {project_name}', scale=(2.5, 1), x=-0.5, y=0.23, z=-1)
 
-Text(parent=left, text='Camera Info', scale=(3, 1.5), x=-0.20, y=0.2, z=-1)
-camera_text = Text(parent=left, text=f'Camera Position: {camera.position}', scale=(2.5, 1), x=-0.5, y=0.13, z=-1)
-camera_rotation = Text(parent=left, text=f'Camera Position: {camera.rotation}', scale=(2.5, 1), x=-0.5, y=0.1, z=-1)
+Text(parent=right, text='Camera Info', scale=(3, 1.5), x=-0.20, y=0.2, z=-1)
+camera_text = Text(parent=right, text=f'Camera Position: {camera.position}', scale=(2.5, 1), x=-0.5, y=0.13, z=-1)
+camera_rotation = Text(parent=right, text=f'Camera Position: {camera.rotation}', scale=(2.5, 1), x=-0.5, y=0.1, z=-1)
 
-Text(parent=left, text='Object Info', scale=(3, 1.5), x=-0.20, y=0.04, z=-1)
-cube_text = Text(parent=left, text=f'Object Name: None', scale=(2.5, 1), x=-0.5, y=-0.01, z=-1)
-cube_position = Text(parent=left, text=f'Object Position: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.04, z=-1)
-cube_rotation = Text(parent=left, text=f'Object Rotation: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.07, z=-1)
-cube_scale = Text(parent=left, text=f'Object Scale: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.1, z=-1)
-cube_texture = Text(parent=left, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.125, z=-1)
+Text(parent=right, text='Object Info', scale=(3, 1.5), x=-0.20, y=0.04, z=-1)
+cube_text = Text(parent=right, text=f'Object Name: None', scale=(2.5, 1), x=-0.5, y=-0.01, z=-1)
+cube_position = Text(parent=right, text=f'Object Position: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.04, z=-1)
+cube_rotation = Text(parent=right, text=f'Object Rotation: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.07, z=-1)
+cube_scale = Text(parent=right, text=f'Object Scale: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.1, z=-1)
+cube_texture = Text(parent=right, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.125, z=-1)
 
 origin = Entity(model='quad', color=color.orange, scale=(.05, .05))
 
@@ -887,7 +889,7 @@ def input(key):
             slider.value += timeline_speed
             editor_camera.rotation_y += -timeline_speed
 
-    if held_keys['left arrow']:
+    if held_keys['right arrow']:
         for cube in cube_nmb:
             cube.rotation_y -= 1
 
