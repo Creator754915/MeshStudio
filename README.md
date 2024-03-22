@@ -82,8 +82,8 @@ This software has several external features and plugins created by the community
 ### Patch 1.1.0
 
 **New features**:
-   1. Rotate cube with new **gismoz**
-   2. New **gismoz** for the **position** and for the **rotation**
+   1. Rotate cube with new **gizmos**
+   2. New **gizmos** for the **position** and for the **rotation**
    3. New **timeline system** with Panel
 
 **Patch**:
