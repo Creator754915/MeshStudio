@@ -1,3 +1,4 @@
+import colorama
 from ursina import *
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
 from ursina.prefabs.checkbox import CheckBox
@@ -9,12 +10,13 @@ app = Ursina(title='Texture Node Editor', borderless=False, fullscreen=False, de
 
 
 class ModelNode(Draggable):
-    def __init__(self, text='Model', position=(0, 0), scale=(.3, .3, .3), color=color.black66):
+    def __init__(self, text='Model', position=(0, 0), scale=(.3, .3, .3), color=Color(0, 0, 0, 0.72)):
         super().__init__(
             text=text,
             text_origin=(0, .4),
             position=position,
             scale=scale,
+            radius=0.05,
             color=color,
             highlight_color=color,
             texture="white_cube")
@@ -39,8 +41,9 @@ class ModelNode(Draggable):
 
 
 class ColorNode(Draggable):
-    def __init__(self, text='RGB Color', position=(0, 0), scale=(.35, .3), color=color.black66):
-        super().__init__(text=text, text_origin=(0, .4), position=position, scale=scale, color=color,
+    def __init__(self, text='RGB Color', position=(0, 0), scale=(.35, .3), color=Color(0, 0, 0, 0.72)):
+        super().__init__(text=text, text_origin=(0, .4), position=position, scale=scale,
+                         radius=0.05, color=color,
                          highlight_color=color)
 
         self.output_attachment = Button(model='circle', position=(.5, -.2, -.01), scale=.07, parent=self)
@@ -65,12 +68,13 @@ class ColorNode(Draggable):
 
 
 class DirectionalLightNode(Draggable):
-    def __init__(self, text='Directional Light', position=(0, 0), scale=.3, color=color.black66):
+    def __init__(self, text='Directional Light', position=(0, 0), scale=.3, color=Color(0, 0, 0, 0.72)):
         super().__init__(
             text=text,
             text_origin=(0, .4),
             position=position,
             scale=scale,
+            radius=0.05,
             color=color,
             highlight_color=color)
 
@@ -87,24 +91,32 @@ class DirectionalLightNode(Draggable):
 
 
 class CameraNode(Draggable):
-    def __init__(self, text='Camera Type Name', position=(0, 0), scale=.3, color=color.black66, **kwargs):
+    def __init__(self, text='Camera Type Name', position=(0, 0), scale=.3, color=Color(0, 0, 0, 0.72), **kwargs):
         super().__init__(
             text=text,
             text_origin=(0, .4),
             position=position,
             scale=scale,
+            radius=.05,
             color=color,
             highlight_color=color)
 
-        self.camera = Entity(position=(-.03, .15, -.01), parent=self)
+        self.camera = Entity(position=(-.03, .15, -.01), scale=(0.3, 0.05), parent=self)
+
+        Entity(parent=self, model="plane", position=(0, 0, 1), rotation=(0, 0, 0), scale=(0.3, 0.05),
+               color=Color(255, 0, 0, 0.90))
+
         # self.cameraText = Text(text='Camera Type Name', position=(-.43, .04, -.01), scale=3.25, parent=self)
-        self.cameraName = InputField(default_value='camera name', limit_content_to='_./abcdefghijklmnopqrstuvwxyz',
-                                     character_limit=13, position=(0, .2, -.01), scale=(.9, .15), parent=self)
+        Text(text="Editor Camera", position=(-0.25, .2, -.02), scale=3, parent=self)
+        self.ec_checkbox = CheckBox(position=(0, .08, -.02), scale=.08, parent=self)
+
+        Text(text="First Camera", position=(-0.25, 0, -.02), scale=3, parent=self)
+        self.fpc_checkbox = CheckBox(position=(0, -.14, -.02), scale=.08, parent=self)
 
     def make(self):
-        if self.cameraName.text == "editorcamera":
+        if self.ec_checkbox.value is True:
             EditorCamera()
-        elif self.cameraName.text == "firstperson":
+        elif self.fpc_checkbox is True:
             FirstPersonController()
         else:
             camera.position = (0, 0, 0)
@@ -166,7 +178,7 @@ addMenu = DropdownMenu(text='Add', buttons=(
     DropdownMenuButton(text='Camera', on_click=Func(createNode, CameraNode)),
 ))
 
-addMenu.x = window.top_left.x + .25
+addMenu.x = window.top_left.x + .23
 
 
 def run():
@@ -198,16 +210,24 @@ def input(key):
 
     if held_keys['control'] and key == 'scroll up':
         for node in nodes:
-            node.scale = node.scale * 1.2
+            if node.scale < 0.9:
+                node.scale = node.scale * 1.2
 
     if held_keys['control'] and key == 'scroll down':
         for node in nodes:
-            node.scale = node.scale / 1.2
+            if node.scale > 0.12:
+                node.scale = node.scale / 1.2
+
+    if held_keys['delete']:
+        if nodes:
+            node = nodes.pop()
+            destroy(node)
 
 
-grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 10))
+grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 20))
 
-runButton = Button(model='circle', icon='run', position=window.top_right + (-.025, -.025), scale=.03,
+runButton = Button(model='circle', icon='./icons/run.png', position=window.top_right + (-.025, -.025), scale=.03,
+                   color=color.black10,
                    on_click=run)
 
 app.run()
