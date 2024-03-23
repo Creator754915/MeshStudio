@@ -2,7 +2,6 @@ import json
 
 from PIL import Image
 from ursina import *
-from ursina import Entity
 from ursina.prefabs.dropdown_menu import DropdownMenuButton, DropdownMenu
 from ursina.prefabs.file_browser import FileBrowser
 from ursina.prefabs.file_browser_save import FileBrowserSave
@@ -11,13 +10,16 @@ from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
 
 from Physics.RigidBody import *
-from TexturesUI import TextureUI
-from assets.plugins.ClickPanel import ClickPanel
 
-from sun import Sun
+# from TexturesUI import TextureUI
+from Assets.plugins.ClickPanel import ClickPanel
+
+from Assets.TimelineSlider.timeline import Timeline
+
+from Physics.sun import Sun
 
 window.title = "MeshStudio"
-window.icon = "meshstudio_logo.png"
+window.icon = "./icons/meshstudio_logo.png"
 app = Ursina(size=(720, 480))
 window.fullscreen = False
 window.borderless = False
@@ -25,6 +27,11 @@ window.exit_button.enabled = False
 window.fps_counter.enabled = False
 
 editor_camera = EditorCamera()
+editor_camera.position = (0, 5, -10)
+editor_camera.rotation = (45, 0, 0)
+editor_camera.enabled = False
+
+
 sky = Sky(texture="sky_default")
 
 project_name = 'Scene1'
@@ -36,7 +43,7 @@ save = False
 
 timeline_speed = 1
 
-debugNode = BulletDebugNode('Debug')
+debugNode = BulletDebugNode()
 debugNode.showWireframe(False)
 debugNode.showConstraints(True)
 debugNode.showBoundingBoxes(False)
@@ -50,8 +57,7 @@ world.setDebugNode(debugNP.node())
 
 physic = False
 
-ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box")
-ground.visbile = False
+ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box", visbile=False)
 gr = Rigidbody(world=world, shape=BoxShape(size=(30, .05, 30)), entity=ground)
 
 empty_texture = Texture(Image.new(mode='RGBA',
@@ -62,6 +68,7 @@ pe.help_text.visible = False
 
 
 def hide_w():
+    editor_camera.enabled = True
     destroy(wp)
 
 
@@ -208,12 +215,12 @@ def custom_effect(effect_name):
                 g = random.randint(0, 255)
                 b = random.randint(0, 255)
 
-                rgb_capsule = Entity(model='sphere', texture='brick', color=rgb(r, g, b), y=8, scale=(1, 2, 1))
-                Rigidbody(world=world, shape=CapsuleShape(height=2, radius=1), entity=rgb_capsule, mass=3)
+                capsule = Entity(model='sphere', texture='brick', y=5, scale=(1, 2, 1), color=Color(r, g, b, 1))
+                Rigidbody(world=world, shape=CapsuleShape(height=2, radius=1), entity=capsule, mass=3)
 
-                Entity(parent=rgb_capsule, model='quad', color=color.orange, scale=(.05, .05))
+                Entity(parent=capsule, model='quad', color=color.orange, scale=(.05, .05))
 
-                physic_nmb.append(rgb_capsule)
+                physic_nmb.append(capsule)
                 hide_wpf()
 
             elif object_name == "box":
@@ -221,12 +228,12 @@ def custom_effect(effect_name):
                 g = random.randint(0, 255)
                 b = random.randint(0, 255)
 
-                rgb_box = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
-                Rigidbody(world=world, shape=BoxShape(), entity=rgb_box, mass=5, friction=.7)
+                box = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
+                Rigidbody(world=world, shape=BoxShape(), entity=box, mass=1)
 
-                Entity(parent=rgb_box, model='quad', color=color.orange, scale=(.05, .05))
+                Entity(parent=box, model='quad', color=color.orange, scale=(.05, .05))
 
-                physic_nmb.append(rgb_box)
+                physic_nmb.append(box)
                 hide_wpf()
 
             elif object_name == "sphere":
@@ -234,12 +241,12 @@ def custom_effect(effect_name):
                 g = random.randint(0, 255)
                 b = random.randint(0, 255)
 
-                rgb_sphere = Entity(model=object_name, texture="brick", color=rgb(r, g, b), y=8, scale=(1, 1, 1))
-                Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
+                sphere = Entity(model='sphere', texture='brick', y=5, color=Color(r, g, b, 1))
+                Rigidbody(world=world, shape=SphereShape(), entity=sphere, mass=5)
 
-                Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
+                Entity(parent=sphere, model='quad', color=color.orange, scale=(.05, .05))
 
-                physic_nmb.append(rgb_sphere)
+                physic_nmb.append(sphere)
                 hide_wpf()
 
         wpf = WindowPanel(
@@ -265,7 +272,7 @@ def custom_effect(effect_name):
             g = random.randint(0, 255)
             b = random.randint(0, 255)
 
-            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=l+1, y=1, scale=(1, 1, 1))
+            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=l + 1, y=1, scale=(1, 1, 1))
             Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
 
             Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
@@ -277,7 +284,7 @@ def custom_effect(effect_name):
             g = random.randint(0, 255)
             b = random.randint(0, 255)
 
-            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=h+2, scale=(1, 1, 1))
+            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), y=h + 2, scale=(1, 1, 1))
             Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
 
             Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
@@ -289,7 +296,7 @@ def custom_effect(effect_name):
             g = random.randint(0, 255)
             b = random.randint(0, 255)
 
-            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=h+1, y=5, scale=(1, 1, 1))
+            rgb_sphere = Entity(model="cube", texture="brick", color=rgb(r, g, b), x=h + 1, y=5, scale=(1, 1, 1))
             Rigidbody(world=world, shape=SphereShape(), entity=rgb_sphere, mass=5, friction=.7)
 
             Entity(parent=rgb_sphere, model='quad', color=color.orange, scale=(.05, .05))
@@ -563,7 +570,7 @@ def texture_edit():
 
 def open_texture():
     bd = {}
-    TextureUI(bd)
+    # TextureUI(bd)
 
 
 def convert_code():
@@ -584,7 +591,7 @@ def edit_mode():
         slider.visible = False
         right.visible = False
 
-        m = load_model("assets/models/cube.obj", use_deepcopy=True)
+        m = load_model("Assets/models/cube.obj", use_deepcopy=True)
         for t in m.vertices:
             Draggable(parent=scene, model="cube", color=color.blue, scale=0.08, position=t)
 
@@ -609,35 +616,33 @@ plane = Entity(name="plane_shaders", model='plane', scale=50, color=color.gray, 
 
 
 def shaders_active():
-    global sun_l
-    axis_x.visible = False
-    axis_y.visible = False
-    axis_z.visible = False
-    floor.visible = False
-    footer.visible = False
-    slider.visible = False
-    right.visible = False
+    sun_l = None
+    if plane.visible is False:
+        axis_x.visible = False
+        axis_y.visible = False
+        axis_z.visible = False
+        floor.visible = False
+        footer.visible = False
+        slider.visible = False
+        right.visible = False
 
-    EditorCamera()
+        EditorCamera()
 
-    plane.visible = True
+        plane.visible = True
 
-    sun_l = Sun(target=origin)
+        sun_l = Sun(target=origin)
+    else:
+        axis_x.visible = True
+        axis_y.visible = True
+        axis_z.visible = True
+        floor.visible = True
+        footer.visible = True
+        slider.visible = True
+        right.visible = True
 
+        plane.visible = False
 
-def shaders_desactive():
-    global sun_l
-    axis_x.visible = True
-    axis_y.visible = True
-    axis_z.visible = True
-    floor.visible = True
-    footer.visible = True
-    slider.visible = True
-    right.visible = True
-
-    plane.visible = False
-
-    destroy(sun_l)
+        destroy(sun_l)
 
 
 def preferences():
@@ -705,6 +710,8 @@ def timeline_options():
 
 
 wp = WindowPanel(
+    y=.3,
+    lock=(1, 1, 1),
     title='Info Project',
     content=(
         Text('Name:'),
@@ -713,10 +720,8 @@ wp = WindowPanel(
         Button(text='SFX', color=color.azure, on_click=open_sound_editor),
         Button(text='Open', color=color.azure, on_click=open_project),
         Button(text='Close', color=color.red, on_click=hide_w)
-    ),
+    )
 )
-
-wp.y = 0.3
 
 file = DropdownMenu('File', buttons=(
     DropdownMenuButton('New', on_click=new_project),
@@ -758,13 +763,13 @@ render_ui = DropdownMenu('Render', buttons=(
     DropdownMenuButton('Render Video', on_click=render_video)
 ))
 mode_ui = DropdownMenu('Mode', buttons=(
-    DropdownMenuButton('Object Mode', on_click=general_mode, radius=0),
-    DropdownMenuButton('Edit Mode', on_click=edit_mode, radius=0),
-    DropdownMenuButton('Physics Mode', on_click=physic_mode, radius=0),
-    DropdownMenuButton('Edit Texture', on_click=texture_edit, radius=0),
+    DropdownMenuButton('Object Mode', on_click=general_mode),
+    DropdownMenuButton('Edit Mode', on_click=edit_mode),
+    DropdownMenuButton('Physics Mode', on_click=physic_mode),
+    DropdownMenuButton('Edit Texture', on_click=texture_edit),
 ))
 shaders_ui = DropdownMenu('Shaders', buttons=(
-    DropdownMenuButton('No Light', on_click=shaders_desactive),
+    DropdownMenuButton('No Light', on_click=shaders_active),
     DropdownMenuButton('With Light', on_click=shaders_active)
 ))
 
@@ -773,8 +778,8 @@ render_ui.x = window.top_left.x + .459
 mode_ui.x = window.top_left.x + .688
 shaders_ui.x = window.top_left.x + .918
 
-footer = Entity(parent=camera.ui, scale=(1.95, 0.3), model=Quad(aspect=3, radius=0), color=color.black33, y=-0.4)
-right = Entity(parent=camera.ui, scale=(0.3, 0.9), model=Quad(aspect=3, radius=0), color=color.black50,
+footer = Entity(parent=camera.ui, scale=(1.95, 0.3), model=Quad(aspect=3, radius=0), color=color.black50, y=-0.4)
+right = Entity(parent=camera.ui, scale=(0.3, 0.9), model=Quad(aspect=3, radius=0), color=color.black66,
                position=(0.75, 0.2))
 
 # Help Keybind
@@ -818,14 +823,14 @@ Button(parent=footer, text="X", scale=(0.1, 0.2), radius=0, x=-0.15, y=0.25, on_
 Button(parent=footer, text="Y", scale=(0.1, 0.2), radius=0, x=-0.15, y=0, on_click=set_y)
 Button(parent=footer, text="Z", scale=(0.1, 0.2), radius=0, x=-0.15, y=-0.25, on_click=set_z)
 
-slider = Slider(1, 359, text='Timeline', default=0, height=Text.size * 2, width=Text.size * 8, y=-.4, step=1,
-                vertical=False)
+slider = Timeline(1, 359, text='Timeline', default=0, height=Text.size * 5, width=Text.size * 8, y=-0.45, step=1,
+                  vertical=False, radius=0)
 
 Button(model='cube', parent=footer, texture="icons/icon_keyframes.png", scale=(.03, 0.2), x=0.3)
 
 # Right
 
-Text(parent=right, text='Project Info', scale=(3, 1.5), x=-0.22, y=0.33, z=-1)
+Text(parent=right, text='Project Info', scale=(3, 1.4), x=-0.33, y=0.33, z=-1)
 
 project_text = Text(parent=right, text=f'Project Name: {project_name}', scale=(2.5, 1), x=-0.5, y=0.23, z=-1)
 
@@ -833,7 +838,7 @@ Text(parent=right, text='Camera Info', scale=(3, 1.5), x=-0.20, y=0.2, z=-1)
 camera_text = Text(parent=right, text=f'Camera Position: {camera.position}', scale=(2.5, 1), x=-0.5, y=0.13, z=-1)
 camera_rotation = Text(parent=right, text=f'Camera Position: {camera.rotation}', scale=(2.5, 1), x=-0.5, y=0.1, z=-1)
 
-Text(parent=right, text='Object Info', scale=(3, 1.5), x=-0.20, y=0.04, z=-1)
+Text(parent=right, text='Object Info', scale=(3, 1.4), x=-0.20, y=0.04, z=-1)
 cube_text = Text(parent=right, text=f'Object Name: None', scale=(2.5, 1), x=-0.5, y=-0.01, z=-1)
 cube_position = Text(parent=right, text=f'Object Position: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.04, z=-1)
 cube_rotation = Text(parent=right, text=f'Object Rotation: 0, 0, 0', scale=(2.5, 1), x=-0.5, y=-0.07, z=-1)
@@ -842,7 +847,8 @@ cube_texture = Text(parent=right, text=f'Object Texture: 0, 0, 0', scale=(2.5, 1
 
 origin = Entity(model='quad', color=color.orange, scale=(.05, .05))
 
-cameraEntity = Draggable(parent=scene, model="camera.obj", collider="mesh", scale=0.5, rotation=(0, 0, 45),
+cameraEntity = Draggable(parent=scene, name="Camera", model="camera.obj", collider="mesh", scale=0.5,
+                         rotation=(0, 0, 45),
                          position=(-8, 5, 0), color=color.black50)
 
 
