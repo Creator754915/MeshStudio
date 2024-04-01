@@ -50,6 +50,38 @@ This software has several external features and plugins created by the community
 
 <p>Coming soon...</p>
 
+<br>
+
+# GeometryNodeEditor
+
+![image](https://github.com/Creator754915/MeshStudio/assets/106489587/ef4122e5-5047-4ae9-8385-a52e6e2ce00a)
+
+```
+ColorNode(
+    color = (255, 255, 255)
+    size = (1, 1, 1)
+    position = (0.5, 0, 0)
+)
+    
+ModelNode(
+    model="cube",
+    scale=5
+    position=(0, 0, 0)
+)
+
+CameraNode(
+    camera=1,
+    position=(-0.5, 0, 0)
+)
+
+
+INIT:
+    ColorNode()
+    ModelNode()
+    CameraNode()
+```
+
+**Save model for GeometryNodeEditor**
 
 
 ## Keybinds:
