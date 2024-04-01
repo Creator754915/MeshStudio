@@ -1,1 +1,1 @@
-Lastest => Beta-2.0.0
+Lastest => Beta-1.5.0
