@@ -25,7 +25,8 @@ This software has several external features and plugins created by the community
 
 <h2>General UI</h2>
 
-![New UI](https://github.com/Creator754915/MeshStudio/assets/106489587/b7ebed94-035a-4d13-867d-d7798e98c6a1)
+![Main UI](https://github.com/Creator754915/MeshStudio/assets/106489587/594d9224-5d48-42aa-aea6-8b295c743d05)
+
 
 <h2>Lights</h2>
 
