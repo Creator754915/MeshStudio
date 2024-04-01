@@ -9,14 +9,17 @@ from ursina.prefabs.grid_editor import PixelEditor
 from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
 
+# Pendas3D
+from panda3d.core import NodePath
+
 from Physics.RigidBody import *
 
 # from TexturesUI import TextureUI
 from Assets.plugins.ClickPanel import ClickPanel
-
 from Assets.TimelineSlider.timeline import Timeline
 
 from Physics.sun import Sun
+from github_request import GetLastestVersion, version
 
 window.title = "MeshStudio"
 window.icon = "./icons/meshstudio_logo.png"
@@ -27,10 +30,9 @@ window.exit_button.enabled = False
 window.fps_counter.enabled = False
 
 editor_camera = EditorCamera()
-editor_camera.position = (0, 5, -10)
+editor_camera.position = (0, 5, -45)
 editor_camera.rotation = (45, 0, 0)
 editor_camera.enabled = False
-
 
 sky = Sky(texture="sky_default")
 
@@ -709,6 +711,8 @@ def timeline_options():
     wpt.y = wpt.panel.scale_y / 2 * wpt.scale_y
 
 
+GetLastestVersion()
+
 wp = WindowPanel(
     y=.3,
     lock=(1, 1, 1),
@@ -719,7 +723,8 @@ wp = WindowPanel(
         Button(text='Texture Edit', color=color.azure, on_click=texture_edit),
         Button(text='SFX', color=color.azure, on_click=open_sound_editor),
         Button(text='Open', color=color.azure, on_click=open_project),
-        Button(text='Close', color=color.red, on_click=hide_w)
+        Button(text='Close', color=color.red, on_click=hide_w),
+        Text(text=version.rstrip(), size=Text.size/1.5)
     )
 )
 
@@ -797,7 +802,16 @@ Text(
 )
 
 # Footer
-floor = Entity(model=Grid(250, 250), rotation_x=90, scale=500, color=rgb(220, 220, 220))
+r = 12
+for i in range(1, r):
+    t = i / r
+    s = 4 * i
+    print(s)
+    floor = Entity(model=Grid(s, s), scale=s, color=color.hsv(0, 0, .8, lerp(.8, 0, t)), rotation_x=90, y=i / 1000)
+    # subgrid = duplicate(floor)
+    # subgrid.model = Grid(s * 2, s * 2)
+    # subgrid.color = color.hsv(0, 0, .4, lerp(.8, 0, t))
+
 axis_x = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.red, rotation=(0, 0, 0))
 axis_y = Entity(model='cube', scale=(0.03, 0.03, 100), color=color.green, rotation=(0, 90, 0))
 axis_z = Entity(model='cube', scale=(0.03, 100, 0.03), color=color.blue, rotation=(0, 90, 0))
@@ -826,8 +840,6 @@ Button(parent=footer, text="Z", scale=(0.1, 0.2), radius=0, x=-0.15, y=-0.25, on
 slider = Timeline(1, 359, text='Timeline', default=0, height=Text.size * 5, width=Text.size * 8, y=-0.45, step=1,
                   vertical=False, radius=0)
 
-Button(model='cube', parent=footer, texture="icons/icon_keyframes.png", scale=(.03, 0.2), x=0.3)
-
 # Right
 
 Text(parent=right, text='Project Info', scale=(3, 1.4), x=-0.33, y=0.33, z=-1)
@@ -849,7 +861,7 @@ origin = Entity(model='quad', color=color.orange, scale=(.05, .05))
 
 cameraEntity = Draggable(parent=scene, name="Camera", model="camera.obj", collider="mesh", scale=0.5,
                          rotation=(0, 0, 45),
-                         position=(-8, 5, 0), color=color.black50)
+                         position=(-8, 5, 0), color=color.black66)
 
 
 def input(key):
