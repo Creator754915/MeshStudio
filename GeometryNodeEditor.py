@@ -9,6 +9,23 @@ from ursina.shaders import lit_with_shadows_shader
 app = Ursina(title='Texture Node Editor', borderless=False, fullscreen=False, development_mode=False, vsync=True)
 
 
+class ConnectorLine(Entity):
+    def __init__(self, start_entity, end_entity, color=color.white):
+        super().__init__(
+            model='quad',
+            color=color,
+            scale=(0, 10),
+            parent=scene)
+
+        self.start_entity = start_entity
+        self.end_entity = end_entity
+        self.update_line()
+
+    def update_line(self):
+        self.position = (self.start_entity.world_position + self.end_entity.world_position) / 2
+        self.look_at(self.end_entity.world_position)
+
+
 class ModelNode(Draggable):
     def __init__(self, text='Model', position=(0, 0), scale=(.3, .3, .3), color=Color(0, 0, 0, 0.72)):
         super().__init__(
@@ -22,6 +39,7 @@ class ModelNode(Draggable):
             texture="white_cube")
 
         self.texture_attachment = Button(model='circle', position=(-.5, 0, -.01), scale=.07, parent=self)
+        self.texture_attachment.on_click = self.update_line
 
         self.path = InputField(default_value='path', limit_content_to='_./abcdefghijklmnopqrstuvwxyz',
                                character_limit=13, position=(0, .2, -.01), scale=(.9, .15), parent=self)
@@ -32,6 +50,9 @@ class ModelNode(Draggable):
         self.shadows = Entity(position=(-.03, -.33, -.01), parent=self)
         self.shadowsText = Text(text='shadows', position=(-.4, .035), scale=3, parent=self.shadows)
         self.shadowsBox = CheckBox(scale=.08, parent=self.shadows)
+
+    def update_line(self):
+        ConnectorLine(runButton, self.texture_attachment)
 
     def make(self):
         self.m = Entity(model=self.path.text)
@@ -91,7 +112,7 @@ class DirectionalLightNode(Draggable):
 
 
 class CameraNode(Draggable):
-    def __init__(self, text='Camera Type Name', position=(0, 0), scale=.3, color=Color(0, 0, 0, 0.72), **kwargs):
+    def __init__(self, text='Camera Type Name', position=(0, 0), scale=.3, color=Color(0, 0, 0, 0.75), **kwargs):
         super().__init__(
             text=text,
             text_origin=(0, .4),
@@ -183,16 +204,20 @@ addMenu.x = window.top_left.x + .23
 
 def run():
     camera.ui.disable()
-    grid.visible = False
+    backButton.visible = True
     for i in range(len(nodes)):
         nodes[i].make()
+
+
+def back():
+    camera.ui.enable()
+    backButton.visible = False
 
 
 def input(key):
     if held_keys['control'] and key == "e":
         try:
             camera.ui.enable()
-            grid.visible = True
             for i in range(len(nodes)):
                 nodes[i].undo()
         except AttributeError:
@@ -210,7 +235,7 @@ def input(key):
 
     if held_keys['control'] and key == 'scroll up':
         for node in nodes:
-            if node.scale < 0.9:
+            if node.scale < 0.89:
                 node.scale = node.scale * 1.2
 
     if held_keys['control'] and key == 'scroll down':
@@ -224,10 +249,17 @@ def input(key):
             destroy(node)
 
 
-grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 20))
+# grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 20))
 
 runButton = Button(model='circle', icon='./icons/run.png', position=window.top_right + (-.025, -.025), scale=.03,
                    color=color.black10,
                    on_click=run)
+
+backButton = Button(parent=scene, model='circle', icon='./icons/run.png', position=window.top_right + (-.025, -.025),
+                    scale=1,
+                    rotation=(0, 0, 180),
+                    color=color.black10,
+                    visible=False,
+                    on_click=back)
 
 app.run()
