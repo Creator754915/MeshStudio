@@ -113,4 +113,4 @@ This software has several external features and plugins created by the community
 </table>
 
 
-*Version BETA-1.5.0.0*
+*Version BETA-1.5.0*
