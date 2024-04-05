@@ -44,6 +44,49 @@ This software has several external features and plugins created by the community
 
 ![Timeline](https://github.com/Creator754915/MeshStudio/assets/106489587/88f59e51-8996-432a-a636-745f3b45d85c)
 
+**Animation Example:**
+
+```json
+{
+   "frame": {
+      "0": {
+         "model": {
+            "name": "HELLO",
+            "position": [
+               0.0,
+               0.0,
+               0.0
+            ],
+            "scale": [
+               1.0,
+               1.0,
+               1.0
+            ],
+            "color": "Color(1.0, 1.0, 1.0, 1.0)"
+         }
+      },
+      "36": {
+         "model": {
+            "name": "HELLO",
+            "position": [
+               -3.188293933868408,
+               0.08317279070615768,
+               2.682209014892578e-07
+            ],
+            "scale": [
+               1.0,
+               1.0,
+               1.0
+            ],
+            "color": "Color(1.0, 1.0, 1.0, 1.0)"
+         }
+      }
+   }
+}
+```
+
+<br>
+
 <h2>Texture Editor</h2>
 
 ![Texture Editor](https://github.com/Creator754915/MeshStudio/assets/106489587/82d9cae4-7b41-4da3-8009-9d6dc23063e8)
