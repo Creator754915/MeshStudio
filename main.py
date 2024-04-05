@@ -92,7 +92,7 @@ def new_project():
         )
         wwp.y = wwp.panel.scale_y / 2 * wwp.scale_y
     else:
-        clear_all()
+        Func(scene.clear(cube_nmb))
 
 
 def add():
