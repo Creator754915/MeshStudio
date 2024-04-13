@@ -10,16 +10,15 @@ from ursina.prefabs.video_recorder import VideoRecorderUI
 from ursina.shaders import lit_with_shadows_shader
 
 # Pendas3D
-from panda3d.core import NodePath
 
 from Physics.RigidBody import *
 
 # from TexturesUI import TextureUI
 from Assets.plugins.ClickPanel import ClickPanel
-from Assets.TimelineSlider.timeline import Timeline
+from Animation.timeline import Timeline
 
 from Physics.sun import Sun
-from github_request import GetLastestVersion, version
+# from github_request import GetLastestVersion, version
 
 window.title = "MeshStudio"
 window.icon = "./icons/meshstudio_logo.png"
@@ -691,8 +690,8 @@ def timeline_options():
 
         hide_wpt()
 
-    step_slider = Slider(.4, 2, step=0.2)
-    speed_slider = Slider(0.5, 5, step=0.5)
+    step_slider = Slider(.4, 2, step=0.2, radius=0.05)
+    speed_slider = Slider(0.5, 5, step=0.5, radius=0.05)
 
     destroy(wp)
 
@@ -711,7 +710,33 @@ def timeline_options():
     wpt.y = wpt.panel.scale_y / 2 * wpt.scale_y
 
 
-GetLastestVersion()
+def physics_options():
+    def hide_wpt():
+        destroy(wpt)
+
+    def apply():
+        world.setGravity(Vec3(0, -gravity_slider.value, 0))
+
+        hide_wpt()
+
+    gravity_slider = Slider(0.1, 10, step=0.1, radius=0.05)
+
+    destroy(wp)
+
+    wpt = WindowPanel(
+        title='Physics Options',
+        content=(
+            Text('Gravity'),
+            gravity_slider,
+            Button(text='Apply', color=color.azure, on_click=apply),
+            Button(text='Close', color=color.red, on_click=hide_wpt)
+        ),
+    )
+
+    wpt.y = wpt.panel.scale_y / 2 * wpt.scale_y
+
+
+# GetLastestVersion()
 
 wp = WindowPanel(
     y=.3,
@@ -724,7 +749,7 @@ wp = WindowPanel(
         Button(text='SFX', color=color.azure, on_click=open_sound_editor),
         Button(text='Open', color=color.azure, on_click=open_project),
         Button(text='Close', color=color.red, on_click=hide_w),
-        Text(text=version.rstrip(), size=Text.size/1.5)
+        Text(text="Version 1.5.5", size=Text.size / 1.5)
     )
 )
 
@@ -739,6 +764,7 @@ file = DropdownMenu('File', buttons=(
     )),
     DropdownMenuButton('Preferences', on_click=preferences),
     DropdownMenuButton('Timeline Options', on_click=timeline_options),
+    DropdownMenuButton('Physics Options', on_click=physics_options),
     DropdownMenuButton('Exit', color=color.rgb(75, 0, 0), on_click=application.quit),
 ))
 edit_ui = DropdownMenu('Edit', buttons=(
