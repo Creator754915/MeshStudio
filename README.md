@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="meshstudio_logo.png">
+  <img src="icons/meshstudio_logo.png">
   <br>
   <img src="https://img.shields.io/badge/Version-1.5.0.0-green?style=for-the-badge">
   <br>
