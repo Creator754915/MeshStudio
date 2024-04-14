@@ -18,6 +18,7 @@ from Assets.plugins.ClickPanel import ClickPanel
 from Animation.timeline import Timeline
 
 from Physics.sun import Sun
+
 # from github_request import GetLastestVersion, version
 
 window.title = "MeshStudio"
@@ -29,8 +30,8 @@ window.exit_button.enabled = False
 window.fps_counter.enabled = False
 
 editor_camera = EditorCamera()
-editor_camera.position = (0, 5, -45)
-editor_camera.rotation = (45, 0, 0)
+editor_camera.position = (35, 35, -35)
+editor_camera.rotation = (33, -44, 0)
 editor_camera.enabled = False
 
 sky = Sky(texture="sky_default")
@@ -58,7 +59,7 @@ world.setDebugNode(debugNP.node())
 
 physic = False
 
-ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box", visbile=False)
+ground = Entity(model='plane', texture='grass', y=0, scale=30, collider="box", visibile=False)
 gr = Rigidbody(world=world, shape=BoxShape(size=(30, .05, 30)), entity=ground)
 
 empty_texture = Texture(Image.new(mode='RGBA',
@@ -574,6 +575,49 @@ def open_texture():
     # TextureUI(bd)
 
 
+def show_texture():
+    def test(txt_arg: str):
+        cube.texture = txt_arg
+        sphere.texture = txt_arg
+
+    button_dict = {}
+
+    bl = ButtonList(button_dict, font='VeraMono.ttf', button_height=1.5, popup=True)
+
+    bl.button_dict = {
+        'noise': Func(test, 'noise'),
+        'grass': Func(test, 'grass'),
+        'vignette': Func(test, 'vignette'),
+        'arrow_right': Func(test, 'arrow_right'),
+        'test_tileset': Func(test, 'test_tileset'),
+        'tilemap_test_level': Func(test, 'tilemap_test_level'),
+        'shore': Func(test, 'shore'),
+        'file_icon': Func(test, 'file_icon'),
+        'sky_sunset': Func(test, 'sky_sunset'),
+        'radial_gradient': Func(test, 'radial_gradient'),
+        'circle': Func(test, 'circle'),
+        'perlin_noise': Func(test, 'perlin_noise'),
+        'brick': Func(test, 'brick'),
+        'grass_tintable': Func(test, 'grass_tintable'),
+        'circle_outlined': Func(test, 'circle_outlined'),
+        'ursina_logo': Func(test, 'ursina_logo'),
+        'arrow_down': Func(test, 'arrow_down'),
+        'cog': Func(test, 'cog'),
+        'vertical_gradient': Func(test, 'vertical_gradient'),
+        'white_cube': Func(test, 'white_cube'),
+        'horizontal_gradient': Func(test, 'horizontal_gradient'),
+        'folder': Func(test, 'folder'),
+        'rainbow': Func(test, 'rainbow'),
+        'heightmap_1': Func(test, 'heightmap_1'),
+        'sky_default': Func(test, 'sky_default'),
+    }
+
+    cube = Entity(parent=camera.ui, model="cube", scale=.22, x=-0.45, y=.13)
+    sphere = Entity(parent=camera.ui, model="sphere", scale=.22, x=-0.45, y=-.13)
+
+    Entity(model="quad", scale=(999, 999), color=color.black66, z=999)
+
+
 def convert_code():
     with open('_convert_file.txt', 'w') as convert:
         clean_cube_nmb = str(cube_nmb).strip('[]') + '\n'
@@ -787,6 +831,7 @@ edit_ui = DropdownMenu('Edit', buttons=(
         DropdownMenuButton('///'),
     )),
     DropdownMenuButton('Textures Folder', on_click=open_texture),
+    DropdownMenuButton('Show All Textures', on_click=show_texture),
     DropdownMenuButton('Convert into code', on_click=convert_code)
 ))
 render_ui = DropdownMenu('Render', buttons=(
@@ -864,7 +909,7 @@ Button(parent=footer, text="Y", scale=(0.1, 0.2), radius=0, x=-0.15, y=0, on_cli
 Button(parent=footer, text="Z", scale=(0.1, 0.2), radius=0, x=-0.15, y=-0.25, on_click=set_z)
 
 slider = Timeline(1, 359, text='Timeline', default=0, height=Text.size * 5, width=Text.size * 8, y=-0.45, step=1,
-                  vertical=False, radius=0)
+                  vertical=False, radius=0, list_to_anim=cube_nmb)
 
 # Right
 
