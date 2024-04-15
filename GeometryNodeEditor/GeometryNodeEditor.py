@@ -8,6 +8,8 @@ from ursina.shaders import lit_with_shadows_shader
 
 app = Ursina(title='Texture Node Editor', borderless=False, fullscreen=False, development_mode=False, vsync=True)
 
+test = Vec4(0, 0, 0, 0.72)
+
 
 class ConnectorLine(Entity):
     def __init__(self, start_entity, end_entity, color=color.white):
@@ -69,20 +71,22 @@ class ColorNode(Draggable):
 
         self.output_attachment = Button(model='circle', position=(.5, -.2, -.01), scale=.07, parent=self)
 
-        self.slider_r = Slider(0, 255, position=(-0.49, .2, -.01), scale=(1.94, 1.96), step=1, parent=self)
-        self.slider_g = Slider(0, 255, position=(-0.49, .1, -.01), scale=(1.94, 1.96), step=1, parent=self)
-        self.slider_b = Slider(0, 255, position=(-0.49, 0, -.01), scale=(1.93, 2), step=1, parent=self)
+        self.slider_r = Slider(0, 255, position=(-0.475, .2, -.01), scale=(1.9, 2), step=1, parent=self)
+        self.slider_g = Slider(0, 255, position=(-0.475, .1, -.01), scale=(1.9, 2), step=1, parent=self)
+        self.slider_b = Slider(0, 255, position=(-0.475, 0, -.01), scale=(1.9, 2), step=1, parent=self)
 
-        self.value_text = Text(position=(-0.25, -.1, -.01), scale=3.25, parent=self)
+        self.value_text = Text(position=(-0.33, -.1, -.01), scale=3.25, parent=self)
 
         self.update_btn = Button(text="Update Value", position=(-0, -.35, -.01), scale=(0.55, 0.22), parent=self,
                                  on_click=self.change)
 
     def make(self):
-        self.tex.color = (self.slider_r.value, self.slider_g.value, self.slider_b.value)
+        global test
+        self.color = Vec4(self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
+        test = self.color
 
     def change(self):
-        self.value_text.text = (self.slider_r.value, self.slider_g.value, self.slider_b.value)
+        self.value_text.text = (self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
 
     def undo(self):
         destroy(self, delay=0)
@@ -248,14 +252,16 @@ def input(key):
             node = nodes.pop()
             destroy(node)
 
+    print(key)
+
 
 # grid = Entity(model=Grid(50, 50), rotation=(0, 0, 0), scale=(50, 50), position=(0, 0, 20))
 
-runButton = Button(model='circle', icon='./icons/run.png', position=window.top_right + (-.025, -.025), scale=.03,
+runButton = Button(model='circle', icon='../icons/run.png', position=window.top_right + (-.025, -.025), scale=.03,
                    color=color.black10,
                    on_click=run)
 
-backButton = Button(parent=scene, model='circle', icon='./icons/run.png', position=window.top_right + (-.025, -.025),
+backButton = Button(parent=scene, model='circle', icon='../icons/run.png', position=window.top_right + (-.025, -.025),
                     scale=1,
                     rotation=(0, 0, 180),
                     color=color.black10,
