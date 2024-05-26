@@ -9,7 +9,7 @@ from ursina import *
 BASE_GITHUB_URL = "https://api.github.com/repos/Creator754915/MeshStudio/contents/version.txt"
 
 GH_USER = "Creator754915"
-GH_TOKEN = "secret_token"
+GH_TOKEN = "TOKEN"
 content_response = requests.get(
     url=BASE_GITHUB_URL,
     headers={"Accept": "application/vnd.github.v4+raw"},
@@ -25,7 +25,7 @@ content_base64 = content_json["content"]
 binary_content = base64.b64decode(content_base64)
 
 version = str(binary_content)
-cleaned_text = version.strip("'")
+cleaned_text = version.strip("b")
 print(cleaned_text)
 
 
@@ -34,12 +34,11 @@ def UpdateMessage():
         with open("version.txt", 'w') as fichier:
             fichier.write(cleaned_text)
 
-
     WindowPanel(
         title="Meshstudio",
         content=(
             Text(text="They is a new update now !", size=Text.size * 1.3),
-            Button(text="Update", color=color.azure, command=update),
+            Button(text="Update", color=color.azure, on_click=update),
             Button(text="Close", color=color.red)
         ),
         y=0.1,
