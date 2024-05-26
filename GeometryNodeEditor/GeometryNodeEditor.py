@@ -77,16 +77,16 @@ class ColorNode(Draggable):
 
         self.value_text = Text(position=(-0.33, -.1, -.01), scale=3.25, parent=self)
 
-        self.update_btn = Button(text="Update Value", position=(-0, -.35, -.01), scale=(0.55, 0.22), parent=self,
-                                 on_click=self.change)
+        self.preview = Entity(model="cube", position=(-0, -.35, -.01), scale=(0.55, 0.22), parent=self)
 
     def make(self):
         global test
         self.color = Vec4(self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
         test = self.color
 
-    def change(self):
+    def update(self):
         self.value_text.text = (self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
+        self.preview.color = (self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
 
     def undo(self):
         destroy(self, delay=0)
@@ -108,7 +108,7 @@ class DirectionalLightNode(Draggable):
         self.shadowsBox = CheckBox(scale=.08, parent=self.shadows)
 
     def make(self):
-        self.sun = DirectionalLight(shadows=self.shadowsBox.state)
+        self.sun = DirectionalLight(shadows=self.shadowsBox.value)
         self.sun.look_at(Vec3(1, -1, -1))
 
     def undo(self):
