@@ -1,0 +1,18 @@
+{
+    "project": {
+        "name": "Scene10",
+        "camera": {
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": -35
+            },
+            "rotation": {
+                "x": 90,
+                "y": 0,
+                "z": 0
+            }
+        },
+        "models": "[Draggable(name='draggable', position=Vec3(-3.34918, 1.38539, -1.60933e-06), model='sphere', color='#87c090ff', collider='box', ), Draggable(name='draggable', position=Vec3(2.90671, -0.354106, 0), model='cube', color='#b2e310ff', collider='box', ), Draggable(name='draggable', position=Vec3(-11.5295, 7.87004, 1.01328e-06), model='plane', color='#9e2d29ff', collider='box', )]"
+    }
+}

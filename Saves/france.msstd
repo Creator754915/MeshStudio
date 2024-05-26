@@ -1,0 +1,18 @@
+{
+    "project": {
+        "name": "FRance",
+        "camera": {
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": -20
+            },
+            "rotation": {
+                "x": 45,
+                "y": 45,
+                "z": 0
+            }
+        },
+        "models": "[Draggable(name='draggable', position=Vec3(-3.44705, 0, 0), model='cube', color='#e3dce0ff', collider='box', ), Draggable(name='draggable', position=Vec3(-2.44422, 0, 0), model='cube', color='#ea0d0dff', collider='box', ), Draggable(name='draggable', position=Vec3(-4.46736, 0, 0), model='cube', color='#308cb0ff', collider='box', )]"
+    }
+}
