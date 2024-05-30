@@ -1,7 +1,7 @@
 import colorama
 from ursina import *
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
-from ursina.prefabs.checkbox import CheckBox
+from Assets.plugins.CheckBox import CheckBox
 from ursina.prefabs.file_browser_save import FileBrowserSave
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import lit_with_shadows_shader
@@ -71,22 +71,27 @@ class ColorNode(Draggable):
 
         self.output_attachment = Button(model='circle', position=(.5, -.2, -.01), scale=.07, parent=self)
 
-        self.slider_r = Slider(0, 255, position=(-0.475, .2, -.01), scale=(1.9, 2), step=1, parent=self)
-        self.slider_g = Slider(0, 255, position=(-0.475, .1, -.01), scale=(1.9, 2), step=1, parent=self)
-        self.slider_b = Slider(0, 255, position=(-0.475, 0, -.01), scale=(1.9, 2), step=1, parent=self)
+        self.slider_r = Slider(0, 255, position=(-0.475, .2, -.01), scale=(1.9, 2), parent=self,
+                               dynamic=True,
+                               on_value_changed=self.UpdateColor)
+        self.slider_g = Slider(0, 255, position=(-0.475, .1, -.01), scale=(1.9, 2), parent=self,
+                               dynamic=True,
+                               on_value_changed=self.UpdateColor)
+        self.slider_b = Slider(0, 255, position=(-0.475, 0, -.01), scale=(1.9, 2), parent=self,
+                               dynamic=True,
+                               on_value_changed=self.UpdateColor)
 
-        self.value_text = Text(position=(-0.33, -.1, -.01), scale=3.25, parent=self)
+        self.value_text = Text(align="left", position=(-0.44, -.1, -.01), size=.065, parent=self)
 
         self.preview = Entity(model="cube", position=(-0, -.35, -.01), scale=(0.55, 0.22), parent=self)
 
     def make(self):
-        global test
-        self.color = Vec4(self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
-        test = self.color
+        print(self.color)
 
-    def update(self):
-        self.value_text.text = (self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
-        self.preview.color = (self.slider_r.value, self.slider_g.value, self.slider_b.value, 0.72)
+    def UpdateColor(self):
+        self.value_text.text = (
+        round(self.slider_r.value, 2), round(self.slider_g.value, 2), round(self.slider_b.value, 2), 0.72)
+        self.preview.color = color.rgba(self.slider_r.value, self.slider_g.value, self.slider_b.value, 255)
 
     def undo(self):
         destroy(self, delay=0)
@@ -107,9 +112,16 @@ class DirectionalLightNode(Draggable):
         self.shadowsText = Text(text='shadows', position=(-.4, .035), scale=3, parent=self.shadows)
         self.shadowsBox = CheckBox(scale=.08, parent=self.shadows)
 
+        self.resolutionText = Text(text='shadows resolution', position=(-.4, -.052), scale=3, parent=self.shadows)
+
+        self.MapResolutionSlider = Slider(32, 2048, default=256, step=32, position=(-0.475, -.1), scale=(1.9, 2),
+                                          parent=self,
+                                          dynamic=True)
+
     def make(self):
-        self.sun = DirectionalLight(shadows=self.shadowsBox.value)
+        self.sun = DirectionalLight(shadows=self.shadowsBox.state)
         self.sun.look_at(Vec3(1, -1, -1))
+        self.sun.shadow_map_resolution = Vec2(self.MapResolutionSlider.value, self.MapResolutionSlider.value)
 
     def undo(self):
         destroy(self.sun, delay=0)
@@ -139,7 +151,7 @@ class CameraNode(Draggable):
         self.fpc_checkbox = CheckBox(position=(0, -.14, -.02), scale=.08, parent=self)
 
     def make(self):
-        if self.ec_checkbox.value is True:
+        if self.ec_checkbox.state is True:
             EditorCamera()
         elif self.fpc_checkbox is True:
             FirstPersonController()
