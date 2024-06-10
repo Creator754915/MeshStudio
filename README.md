@@ -17,9 +17,11 @@ MeshStudio is a software created entirely with the Python and with Ursina Engine
 
 This software has several external features and plugins created by the community
 
-### **WARNING!** 
+### ** LAUNCH MESHSTUDIO ** 
 
-**YOU NEED INSTALL ```pip install https://github.com/Creator754915/Ursina.More.UI.git```**
+**You need to install first => ```pip install https://github.com/Creator754915/Ursina.More.UI.git```**
+
+**After run the Launcher.py**
 
 # Features
 
