@@ -9,7 +9,6 @@ asttokens==2.4.1
 astunparse==1.6.3
 async-lru==2.0.4
 attrs==23.2.0
-auto-py-to-exe==2.34.0
 Babel==2.14.0
 beautifulsoup4==4.12.3
 bleach==6.1.0
